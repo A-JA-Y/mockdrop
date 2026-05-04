@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MockDrop — AI Social Mockup Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#0A0A0A;--white:#F5F2EC;--accent:#E8FF47;--accent2:#FF6B35;--card-bg:#141414;--border:rgba(255,255,255,0.08);--ai:#74AA9C;--nav-h:68px}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 3rem;height:var(--nav-h);backdrop-filter:blur(14px);background:rgba(10,10,10,0.85);border-bottom:1px solid var(--border)}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:.05em;color:var(--white);text-decoration:none}
+.logo span{color:var(--accent)}
+.nav-links{list-style:none;display:flex;align-items:center;gap:2rem}
+.nav-links a{text-decoration:none;color:rgba(245,242,236,.55);font-size:.88rem;font-weight:400;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.nav-cta{background:var(--accent);color:var(--black);padding:.5rem 1.2rem;border-radius:7px;font-weight:600;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.88rem;transition:opacity .15s,transform .15s;white-space:nowrap}
+.nav-cta:hover{opacity:.88;transform:translateY(-1px)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+.hamburger span{width:22px;height:2px;background:var(--white);border-radius:2px;display:block;transition:all .25s}
+.mobile-menu{display:none;position:fixed;top:var(--nav-h);left:0;right:0;z-index:199;background:rgba(12,12,12,.97);border-bottom:1px solid var(--border);padding:1.5rem 2rem;flex-direction:column;gap:1rem;backdrop-filter:blur(12px)}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:rgba(245,242,236,.7);text-decoration:none;font-size:1rem;padding:.5rem 0;border-bottom:1px solid var(--border)}
+.mobile-menu a:last-of-type{border-bottom:none}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal-box{background:#141414;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:2.5rem;width:100%;max-width:480px;position:relative;animation:mIn .2s ease}
+@keyframes mIn{from{opacity:0;transform:scale(.96) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-close{position:absolute;top:1.25rem;right:1.25rem;background:rgba(255,255,255,.07);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;color:rgba(245,242,236,.5);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.modal-close:hover{background:rgba(255,255,255,.14);color:var(--white)}
+.modal-tag{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--accent2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;line-height:1;margin-bottom:.4rem}
+.modal-sub{font-size:.83rem;color:rgba(245,242,236,.4);margin-bottom:1.75rem;line-height:1.5}
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:.9rem}
+.form-label{font-size:.72rem;color:rgba(245,242,236,.4);font-family:'DM Mono',monospace;letter-spacing:.05em;text-transform:uppercase}
+.form-input{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.7rem 1rem;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .15s;width:100%}
+.form-input:focus{border-color:rgba(232,255,71,.4)}
+.form-input::placeholder{color:rgba(245,242,236,.18)}
+textarea.form-input{resize:vertical;min-height:96px}
+.form-submit{background:var(--accent);color:var(--black);border:none;border-radius:8px;padding:.85rem;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:opacity .15s,transform .15s;width:100%;margin-top:.25rem}
+.form-submit:hover{opacity:.88;transform:translateY(-1px)}
+.modal-success{display:none;text-align:center;padding:1rem 0}
+.modal-success.show{display:block}
+.success-icon{font-size:3rem;margin-bottom:1rem}
+.success-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--accent);margin-bottom:.5rem}
+.success-msg{font-size:.88rem;color:rgba(245,242,236,.5);line-height:1.65}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8rem 2rem 4rem;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 60% 40% at 70% 20%,rgba(232,255,71,.07) 0%,transparent 70%),radial-gradient(ellipse 50% 50% at 20% 80%,rgba(255,107,53,.06) 0%,transparent 65%)}
+.hero-grid{position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 80%)}
+.hero-content{position:relative;z-index:1;text-align:center;max-width:860px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(232,255,71,.1);border:1px solid rgba(232,255,71,.25);border-radius:100px;padding:.35rem 1rem;font-size:.78rem;font-weight:500;color:var(--accent);letter-spacing:.05em;text-transform:uppercase;margin-bottom:1.8rem}
+.hero-badge::before{content:'';width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,9vw,8rem);line-height:.92;letter-spacing:.01em;margin-bottom:1.5rem}
+h1 em{font-style:normal;color:var(--accent);display:block}
+.hero-sub{font-size:1.1rem;font-weight:300;color:rgba(245,242,236,.6);line-height:1.65;max-width:520px;margin:0 auto 2.5rem}
+.hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:4rem}
+.btn-primary{background:var(--accent);color:var(--black);font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;padding:.85rem 2rem;border:none;border-radius:8px;cursor:pointer;transition:transform .15s,box-shadow .15s;text-decoration:none;display:inline-block}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(232,255,71,.2)}
+.btn-ghost{background:transparent;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:400;padding:.85rem 2rem;border:1px solid rgba(255,255,255,.15);border-radius:8px;cursor:pointer;transition:border-color .2s,background .2s;text-decoration:none;display:inline-block}
+.btn-ghost:hover{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.04)}
+.platform-pills{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem}
+.pill{display:flex;align-items:center;gap:6px;padding:.35rem .85rem;border:1px solid var(--border);border-radius:100px;font-size:.78rem;color:rgba(245,242,236,.45);font-family:'DM Mono',monospace}
+.pill-dot{width:7px;height:7px;border-radius:50%}
+.platforms-note{font-size:.78rem;color:rgba(245,242,236,.3);margin-top:.5rem}
+
+/* SECTION */
+.section-label{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--accent2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,4vw,3.5rem);line-height:1;margin-bottom:1.25rem}
+.section-sub{font-size:.95rem;color:rgba(245,242,236,.5);font-weight:300;line-height:1.6;max-width:460px;margin-bottom:2.5rem}
+
+/* DEMO */
+.demo{padding:5rem 2rem;max-width:1100px;margin:0 auto}
+.demo-builder{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.builder-toolbar{display:flex;align-items:center;gap:1.5rem;padding:1rem 1.5rem;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);flex-wrap:wrap}
+.toolbar-label{font-size:.75rem;color:rgba(245,242,236,.35);font-family:'DM Mono',monospace}
+.platform-tabs{display:flex;gap:.4rem;flex:1;flex-wrap:wrap}
+.ptab{padding:.35rem .85rem;border-radius:6px;font-size:.8rem;font-weight:500;cursor:pointer;border:1px solid transparent;background:transparent;color:rgba(245,242,236,.4);font-family:'DM Sans',sans-serif;transition:all .15s}
+.ptab:hover{background:rgba(255,255,255,.06);color:var(--white)}
+.ptab.active{background:rgba(232,255,71,.1);border-color:rgba(232,255,71,.3);color:var(--accent)}
+.mode-toggle{display:flex;gap:.25rem;background:rgba(255,255,255,.05);border-radius:6px;padding:3px}
+.mtab{padding:.3rem .7rem;border-radius:4px;font-size:.75rem;cursor:pointer;border:none;background:transparent;color:rgba(245,242,236,.35);font-family:'DM Sans',sans-serif;transition:all .15s}
+.mtab.active{background:var(--card-bg);color:var(--white)}
+.builder-body{display:grid;grid-template-columns:1fr 1.2fr;min-height:520px}
+.builder-input{padding:1.5rem;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:1rem}
+.input-label{font-size:.72rem;color:rgba(245,242,236,.35);font-family:'DM Mono',monospace;letter-spacing:.05em;text-transform:uppercase}
+.participants-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.field-group{display:flex;flex-direction:column;gap:6px}
+input[type="text"],input[type="email"]{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:.55rem .85rem;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;width:100%;transition:border-color .15s}
+input[type="text"]:focus,input[type="email"]:focus{border-color:rgba(232,255,71,.4)}
+input::placeholder{color:rgba(245,242,236,.2)}
+.messages-area{flex:1;display:flex;flex-direction:column;gap:.5rem;overflow-y:auto;max-height:190px}
+.msg-row{display:flex;gap:8px;align-items:flex-end}
+.msg-side-label{font-size:.7rem;color:rgba(245,242,236,.3);font-family:'DM Mono',monospace;min-width:32px;flex-shrink:0}
+.msg-input-wrap{flex:1}
+.add-msg-btn{background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.1);border-radius:7px;color:rgba(245,242,236,.3);font-size:.8rem;padding:.45rem 1rem;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;transition:all .15s}
+.add-msg-btn:hover{border-color:rgba(232,255,71,.3);color:var(--accent)}
+.ai-gen-btn{background:rgba(116,170,156,.12);border:1px solid rgba(116,170,156,.25);border-radius:7px;color:var(--ai);font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;padding:.6rem 1rem;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px;width:100%;justify-content:center}
+.ai-gen-btn:hover{background:rgba(116,170,156,.2)}
+.ai-icon{width:14px;height:14px;border-radius:50%;background:var(--ai);display:inline-flex;align-items:center;justify-content:center;font-size:8px;color:var(--black);font-weight:700;flex-shrink:0}
+.gen-preview-btn{background:var(--accent);border:none;border-radius:8px;color:var(--black);font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;padding:.75rem;cursor:pointer;transition:opacity .15s,transform .15s;display:flex;align-items:center;gap:8px;justify-content:center;width:100%}
+.gen-preview-btn:hover{opacity:.88;transform:translateY(-1px)}
+.builder-preview{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:1.5rem;background:rgba(0,0,0,.3);overflow:hidden}
+.preview-header{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:1rem}
+.preview-label{font-size:.7rem;color:rgba(245,242,236,.3);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em}
+.download-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:rgba(245,242,236,.5);font-size:.75rem;font-family:'DM Sans',sans-serif;padding:.35rem .75rem;cursor:pointer;transition:all .15s}
+.download-btn:hover{color:var(--white);border-color:rgba(255,255,255,.25)}
+.phone-frame{width:220px;background:#1A1A1A;border-radius:32px;border:3px solid rgba(255,255,255,.12);overflow:hidden;box-shadow:0 32px 64px rgba(0,0,0,.5);transition:all .3s ease}
+.phone-frame.light-mode{background:#fff;border-color:rgba(0,0,0,.15)}
+.chat-status-bar{height:24px;background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:space-between;padding:0 12px}
+.chat-status-bar .time{font-size:9px;font-weight:600;color:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif}
+.phone-frame.light-mode .chat-status-bar{background:rgba(0,0,0,.03)}
+.phone-frame.light-mode .time{color:rgba(0,0,0,.6)}
+.wa-header{background:#128C7E;padding:8px 10px;display:flex;align-items:center;gap:8px}
+.wa-avatar{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;font-family:'DM Sans',sans-serif;flex-shrink:0}
+.wa-name{font-size:11px;font-weight:600;color:#fff;font-family:'DM Sans',sans-serif}
+.wa-status{font-size:8px;color:rgba(255,255,255,.65);font-family:'DM Sans',sans-serif}
+.wa-body{background:#E5DDD5;padding:8px;min-height:300px;display:flex;flex-direction:column;gap:4px}
+.wa-body.dark{background:#0D1117}
+.wa-bubble{max-width:78%;padding:5px 8px;border-radius:8px;font-size:9px;font-family:'DM Sans',sans-serif;line-height:1.4}
+.wa-bubble.received{background:#fff;color:#111;align-self:flex-start;border-top-left-radius:2px}
+.wa-bubble.sent{background:#DCF8C6;color:#111;align-self:flex-end;border-top-right-radius:2px}
+.wa-body.dark .wa-bubble.received{background:#1E2A35;color:#E8E8E8}
+.wa-body.dark .wa-bubble.sent{background:#005C4B;color:#E8E8E8}
+.wa-time{font-size:7px;color:rgba(0,0,0,.35);margin-top:2px;text-align:right}
+.wa-body.dark .wa-time{color:rgba(255,255,255,.35)}
+.wa-input-row{background:rgba(255,255,255,.05);padding:5px 8px;display:flex;align-items:center;gap:5px}
+.wa-msg-box{background:rgba(255,255,255,.08);border-radius:18px;height:20px;flex:1;border:none}
+.tw-header{background:#15202B;padding:10px;display:flex;align-items:center;gap:6px}
+.tw-back{font-size:14px;color:#1DA1F2}
+.tw-header-name{font-size:11px;font-weight:700;color:#fff;font-family:'DM Sans',sans-serif}
+.tw-header-handle{font-size:9px;color:rgba(255,255,255,.4);font-family:'DM Sans',sans-serif}
+.tw-body{background:#15202B;padding:10px;min-height:300px;display:flex;flex-direction:column;gap:8px}
+.tw-body.light{background:#fff}
+.tweet-card{border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px}
+.tw-body.light .tweet-card{border-color:rgba(0,0,0,.08)}
+.tw-user-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.tw-av{width:28px;height:28px;border-radius:50%;background:#1DA1F2;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;font-family:'DM Sans',sans-serif;flex-shrink:0}
+.tw-uname{font-size:10px;font-weight:700;color:#fff;font-family:'DM Sans',sans-serif}
+.tw-handle{font-size:9px;color:rgba(255,255,255,.4);font-family:'DM Sans',sans-serif}
+.tw-body.light .tw-uname{color:#111}
+.tw-body.light .tw-handle{color:rgba(0,0,0,.4)}
+.tweet-text{font-size:10px;line-height:1.5;color:rgba(255,255,255,.9);margin-bottom:6px;font-family:'DM Sans',sans-serif}
+.tw-body.light .tweet-text{color:#111}
+.tweet-stats{display:flex;gap:12px;font-size:8px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace}
+.tw-body.light .tweet-stats{color:rgba(0,0,0,.35)}
+.ai-body{background:#212121;min-height:300px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.ai-body.light{background:#F9F9F9}
+.ai-msg{display:flex;flex-direction:column;gap:4px}
+.ai-role{font-size:7px;letter-spacing:.08em;text-transform:uppercase;font-family:'DM Mono',monospace;color:rgba(255,255,255,.3)}
+.ai-body.light .ai-role{color:rgba(0,0,0,.3)}
+.ai-text{font-size:9px;line-height:1.5;color:rgba(255,255,255,.85);font-family:'DM Sans',sans-serif;padding:7px 9px;border-radius:8px;background:rgba(255,255,255,.04)}
+.ai-body.light .ai-text{background:rgba(0,0,0,.04);color:#111}
+.ai-text.assistant-msg{background:rgba(116,170,156,.12);border-left:2px solid var(--ai)}
+.ai-header{background:#171717;padding:8px 10px;display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(255,255,255,.06)}
+.ai-logo{width:18px;height:18px;border-radius:4px;background:var(--ai);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#1A1A1A;font-family:'DM Mono',monospace}
+.ai-title{font-size:9px;font-weight:600;color:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif}
+.ai-generating{display:none;align-items:center;gap:8px;font-size:.78rem;color:var(--ai);font-family:'DM Mono',monospace;padding:.5rem 0}
+.ai-generating.show{display:flex}
+.dots{display:flex;gap:3px}
+.dots span{width:5px;height:5px;border-radius:50%;background:var(--ai);animation:bounce 1.2s ease-in-out infinite}
+.dots span:nth-child(2){animation-delay:.2s}
+.dots span:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-4px);opacity:1}}
+
+/* FEATURES */
+.features{padding:6rem 2rem;max-width:1100px;margin:0 auto}
+.features-header{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:end;margin-bottom:3.5rem}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.feature-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:1.5rem;transition:border-color .2s,transform .2s}
+.feature-card:hover{border-color:rgba(232,255,71,.2);transform:translateY(-3px)}
+.feature-card.big{grid-column:span 2;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:center}
+.feature-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:1rem}
+.icon-green{background:rgba(37,211,102,.1)}
+.icon-blue{background:rgba(29,161,242,.1)}
+.icon-orange{background:rgba(255,107,53,.15)}
+.icon-yellow{background:rgba(232,255,71,.1)}
+.icon-purple{background:rgba(167,115,250,.1)}
+.feature-card h3{font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;margin-bottom:.5rem;color:var(--white)}
+.feature-card p{font-size:.83rem;color:rgba(245,242,236,.45);line-height:1.6;font-weight:300}
+.feature-visual{background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:10px;padding:1rem;display:flex;flex-direction:column;gap:.5rem}
+.convo-line{display:flex;gap:8px;align-items:flex-start}
+.convo-av{width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;font-family:'DM Sans',sans-serif}
+.convo-bubble{background:rgba(255,255,255,.06);border-radius:8px;padding:5px 8px;font-size:8px;color:rgba(245,242,236,.7);font-family:'DM Sans',sans-serif;line-height:1.4;max-width:85%}
+.convo-bubble.ai-bubble{background:rgba(116,170,156,.1);border-left:1.5px solid var(--ai);color:rgba(245,242,236,.8)}
+
+/* PLATFORMS */
+.platforms{padding:4rem 2rem;max-width:1100px;margin:0 auto}
+.platform-logos{display:grid;grid-template-columns:repeat(6,1fr);gap:1rem;margin-top:2.5rem}
+.platform-logo-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:1.25rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;transition:all .2s}
+.platform-logo-card:hover{border-color:rgba(255,255,255,.15);transform:translateY(-2px)}
+.plat-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.plat-name{font-size:.7rem;color:rgba(245,242,236,.35);font-family:'DM Mono',monospace;text-align:center}
+.more-plats{background:var(--card-bg);border:1px dashed rgba(255,255,255,.1);border-radius:12px;padding:1.25rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;color:rgba(245,242,236,.2);font-size:.7rem;font-family:'DM Mono',monospace}
+
+/* PRICING */
+.pricing{padding:6rem 2rem;max-width:900px;margin:0 auto;text-align:center}
+.pricing-cards{display:grid;grid-template-columns:1fr 1.05fr 1fr;gap:1rem;margin-top:3rem;text-align:left}
+.price-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:1.75rem 1.5rem}
+.price-card.featured{border-color:rgba(232,255,71,.3);background:rgba(232,255,71,.03);position:relative}
+.popular-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--black);font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.3rem 1rem;border-radius:0 0 8px 8px;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.plan-name{font-size:.75rem;color:rgba(245,242,236,.35);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem}
+.price-amount{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--white);line-height:1;margin-bottom:.25rem}
+.price-amount span{font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:300;color:rgba(245,242,236,.4)}
+.price-sub{font-size:.78rem;color:rgba(245,242,236,.3);margin-bottom:1.5rem}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.75rem}
+.price-features li{font-size:.82rem;color:rgba(245,242,236,.55);display:flex;align-items:flex-start;gap:8px;line-height:1.4}
+.price-features li::before{content:'✓';color:var(--accent);font-weight:700;flex-shrink:0;font-size:.78rem;margin-top:1px}
+.price-features li.disabled{opacity:.3}
+.price-features li.disabled::before{content:'×';color:rgba(245,242,236,.3)}
+.plan-btn{width:100%;padding:.7rem;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(245,242,236,.7);transition:all .15s}
+.plan-btn:hover{background:rgba(255,255,255,.05);color:var(--white)}
+.plan-btn.featured-btn{background:var(--accent);border-color:transparent;color:var(--black);font-weight:600}
+.plan-btn.featured-btn:hover{opacity:.88}
+
+/* CREATOR */
+.creator{padding:6rem 2rem;max-width:1100px;margin:0 auto}
+.creator-inner{display:grid;grid-template-columns:1fr 1.8fr;gap:4rem;align-items:center;background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:3rem}
+.creator-avatar-wrap{display:flex;flex-direction:column;align-items:center;gap:1.5rem}
+.creator-avatar{width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,rgba(232,255,71,.12) 0%,rgba(116,170,156,.18) 100%);border:2px solid rgba(232,255,71,.2);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--accent)}
+.creator-socials{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.social-pill{padding:.3rem .85rem;border:1px solid var(--border);border-radius:100px;font-size:.72rem;color:rgba(245,242,236,.4);font-family:'DM Mono',monospace;text-decoration:none;transition:all .15s}
+.social-pill:hover{border-color:rgba(232,255,71,.3);color:var(--accent)}
+.creator-tag{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--accent2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+.creator-name{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;line-height:1;margin-bottom:.3rem}
+.creator-designation{font-size:.85rem;color:var(--ai);font-family:'DM Mono',monospace;margin-bottom:1.25rem}
+.creator-bio{font-size:.88rem;color:rgba(245,242,236,.5);line-height:1.78;font-weight:300}
+.creator-stats{display:flex;gap:2rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);flex-wrap:wrap}
+.stat-item{display:flex;flex-direction:column;gap:3px}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--accent);line-height:1}
+.stat-label{font-size:.72rem;color:rgba(245,242,236,.3);font-family:'DM Mono',monospace}
+
+/* CONTACT */
+.contact{padding:6rem 2rem;max-width:1100px;margin:0 auto}
+.contact-inner{display:grid;grid-template-columns:1fr 1.3fr;gap:4rem;align-items:start}
+.contact-info{display:flex;flex-direction:column;gap:1.5rem}
+.contact-item{display:flex;align-items:flex-start;gap:1rem}
+.contact-icon{width:40px;height:40px;border-radius:50%;border:1px solid rgba(116,170,156,.25);background:rgba(116,170,156,.08);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;color:var(--ai)}
+.contact-detail-label{font-size:.72rem;color:rgba(245,242,236,.3);font-family:'DM Mono',monospace;margin-bottom:3px}
+.contact-detail-val{font-size:.9rem;color:rgba(245,242,236,.7);line-height:1.55}
+.contact-form-box{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:2rem}
+
+/* CTA */
+.cta-section{padding:7rem 2rem;text-align:center;position:relative;overflow:hidden}
+.cta-bg{position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 50% 50%,rgba(232,255,71,.05) 0%,transparent 70%)}
+.cta-content{position:relative;z-index:1}
+.cta-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,6vw,5.5rem);line-height:.95;margin-bottom:1rem}
+.cta-sub{font-size:1rem;color:rgba(245,242,236,.5);font-weight:300;margin-bottom:2rem}
+
+/* FOOTER */
+footer{background:#0D1117;border-top:1px solid rgba(255,255,255,.06);padding:3.5rem 3rem 0}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.3fr;gap:3rem;padding-bottom:3rem}
+.footer-logo-wrap{display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+.footer-logo-icon{width:36px;height:36px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--black);flex-shrink:0}
+.footer-logo-text{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.05em}
+.footer-logo-text span{color:var(--accent)}
+.footer-tagline{font-size:.83rem;color:rgba(245,242,236,.4);line-height:1.65;font-weight:300;max-width:220px;margin-bottom:1.5rem}
+.footer-ph-btn{display:inline-flex;align-items:center;gap:10px;background:transparent;border:1.5px solid rgba(255,107,53,.35);border-radius:8px;padding:.6rem 1rem;cursor:pointer;text-decoration:none;transition:all .2s}
+.footer-ph-btn:hover{border-color:var(--accent2);background:rgba(255,107,53,.06)}
+.footer-ph-icon{width:30px;height:30px;border-radius:50%;background:var(--accent2);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.85rem;font-family:'DM Sans',sans-serif;flex-shrink:0}
+.footer-ph-text{display:flex;flex-direction:column}
+.footer-ph-sub{font-size:.6rem;color:rgba(245,242,236,.35);font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase}
+.footer-ph-main{font-size:.82rem;font-weight:600;color:var(--accent2)}
+.footer-col-title{font-size:.78rem;font-weight:600;color:rgba(245,242,236,.65);letter-spacing:.04em;margin-bottom:1.25rem;font-family:'DM Sans',sans-serif}
+.footer-links-list{list-style:none;display:flex;flex-direction:column;gap:.75rem}
+.footer-links-list a{text-decoration:none;font-size:.83rem;color:rgba(245,242,236,.4);font-family:'DM Sans',sans-serif;transition:color .2s}
+.footer-links-list a:hover{color:rgba(245,242,236,.8)}
+.footer-contact-list{display:flex;flex-direction:column;gap:1rem}
+.footer-contact-item{display:flex;align-items:flex-start;gap:10px}
+.footer-contact-ic{width:32px;height:32px;border-radius:50%;border:1px solid rgba(116,170,156,.2);background:rgba(116,170,156,.06);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;color:var(--ai);margin-top:1px}
+.footer-contact-text{font-size:.82rem;color:rgba(245,242,236,.4);line-height:1.55}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.05);padding:1.25rem 0;text-align:center}
+.footer-bottom p{font-size:.75rem;color:rgba(245,242,236,.2);font-family:'DM Mono',monospace}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:0 1.5rem}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .builder-body{grid-template-columns:1fr}
+  .builder-input{border-right:none;border-bottom:1px solid var(--border)}
+  .features-header{grid-template-columns:1fr;gap:1rem}
+  .features-grid{grid-template-columns:1fr 1fr}
+  .feature-card.big{grid-column:span 2;grid-template-columns:1fr}
+  .platform-logos{grid-template-columns:repeat(3,1fr)}
+  .pricing-cards{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto}
+  .creator-inner{grid-template-columns:1fr;gap:2rem;text-align:center;padding:2rem}
+  .creator-avatar-wrap{width:100%}
+  .creator-stats{justify-content:center}
+  .contact-inner{grid-template-columns:1fr;gap:2rem}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
+}
+@media(max-width:600px){
+  nav{padding:0 1.2rem;height:60px;--nav-h:60px}
+  .hero{padding:6rem 1.25rem 3rem}
+  h1{font-size:clamp(2.8rem,12vw,4rem)}
+  .hero-sub{font-size:.95rem}
+  .demo,.features,.platforms,.pricing,.creator,.contact{padding:3.5rem 1.25rem}
+  .features-grid{grid-template-columns:1fr}
+  .feature-card.big{grid-column:span 1;grid-template-columns:1fr}
+  .platform-logos{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr;gap:1.75rem}
+  footer{padding:2.5rem 1.25rem 0}
+  .modal-box{padding:1.75rem 1.25rem}
+  .builder-toolbar{gap:.75rem}
+  .platform-tabs{gap:.2rem}
+  .ptab{padding:.3rem .55rem;font-size:.72rem}
+}
+</style>
+</head>
+<body>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-form-wrap">
+      <div class="modal-tag" id="modal-tag">Request a Demo</div>
+      <div class="modal-title" id="modal-title">Get Early Access</div>
+      <div class="modal-sub" id="modal-sub">Tell us about yourself and we'll reach out to set things up.</div>
+      <div id="modal-fields">
+        <div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-input" placeholder="Jane Smith"></div>
+        <div class="form-group"><label class="form-label">Work Email</label><input type="email" class="form-input" placeholder="jane@company.com"></div>
+        <div class="form-group"><label class="form-label">Company / Role</label><input type="text" class="form-input" placeholder="Acme Inc — Marketing Lead"></div>
+        <div class="form-group"><label class="form-label">Message (optional)</label><textarea class="form-input" placeholder="What are you hoping to build with MockDrop?"></textarea></div>
+        <button class="form-submit" onclick="submitModal()">Submit Request →</button>
+      </div>
+    </div>
+    <div class="modal-success" id="modal-success">
+      <div class="success-icon">✦</div>
+      <div class="success-title">We'll inform you!</div>
+      <p class="success-msg">Thanks for reaching out. Our team will get back to you within 24 hours. Keep an eye on your inbox!</p>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">Mock<span>Drop</span></a>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#about">About Us</a></li>
+    <li><a href="#contact">Contact Us</a></li>
+    <li><button class="nav-cta" onclick="openModal('Request a Demo','Book a Live Walkthrough','Fill in your details and our team will schedule a personalized demo for you.')">Request a Demo</button></li>
+  </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleMobile()" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#" onclick="closeMobile()">Home</a>
+  <a href="#about" onclick="closeMobile()">About Us</a>
+  <a href="#contact" onclick="closeMobile()">Contact Us</a>
+  <button class="nav-cta" style="width:100%;padding:.75rem;font-size:.95rem;margin-top:.5rem" onclick="closeMobile();openModal('Request a Demo','Book a Live Walkthrough','Fill in your details and our team will schedule a personalized demo for you.')">Request a Demo</button>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">AI-powered mockup engine</div>
+    <h1>Stop faking.<em>Start Dropping.</em></h1>
+    <p class="hero-sub">Generate hyper-realistic social & chat mockups in seconds. Let AI write the conversations — you take the credit.</p>
+    <div class="hero-actions">
+      <a href="https://www.producthunt.com" target="_blank" rel="noopener" class="btn-primary">View on Product Hunt →</a>
+      <a href="#about" class="btn-ghost">About Us</a>
+    </div>
+    <div class="platform-pills">
+      <div class="pill"><span class="pill-dot" style="background:#25D366"></span>WhatsApp</div>
+      <div class="pill"><span class="pill-dot" style="background:#1DA1F2"></span>Twitter / X</div>
+      <div class="pill"><span class="pill-dot" style="background:#E1306C"></span>Instagram</div>
+      <div class="pill"><span class="pill-dot" style="background:#74AA9C"></span>ChatGPT</div>
+      <div class="pill"><span class="pill-dot" style="background:#7C3AED"></span>Gemini</div>
+      <div class="pill"><span class="pill-dot" style="background:#0A66C2"></span>LinkedIn</div>
+    </div>
+    <p class="platforms-note">+ 30 more platforms. Zero watermarks. Zero Photoshop.</p>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section class="demo" id="demo">
+  <div class="section-label">Live Demo</div>
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem">
+    <div>
+      <div class="section-title">Build your mockup,<br>right here.</div>
+      <div class="section-sub">No sign-up. Just type — or let AI write it for you.</div>
+    </div>
+    <div class="ai-generating" id="ai-status"><div class="dots"><span></span><span></span><span></span></div>AI is writing your conversation...</div>
+  </div>
+  <div class="demo-builder">
+    <div class="builder-toolbar">
+      <span class="toolbar-label">Platform</span>
+      <div class="platform-tabs">
+        <button class="ptab active" onclick="switchPlatform('wa',this)">WhatsApp</button>
+        <button class="ptab" onclick="switchPlatform('tw',this)">Twitter / X</button>
+        <button class="ptab" onclick="switchPlatform('ai',this)">ChatGPT</button>
+      </div>
+      <div class="mode-toggle">
+        <button class="mtab active" onclick="switchMode('dark',this)">Dark</button>
+        <button class="mtab" onclick="switchMode('light',this)">Light</button>
+      </div>
+    </div>
+    <div class="builder-body">
+      <div class="builder-input">
+        <div>
+          <div class="input-label" style="margin-bottom:8px">Participants</div>
+          <div class="participants-row">
+            <div class="field-group"><span style="font-size:.7rem;color:rgba(245,242,236,.25);font-family:'DM Mono',monospace">You</span><input type="text" id="name-you" placeholder="Your name" value="Alex"></div>
+            <div class="field-group"><span style="font-size:.7rem;color:rgba(245,242,236,.25);font-family:'DM Mono',monospace">Them</span><input type="text" id="name-them" placeholder="Their name" value="Jordan"></div>
+          </div>
+        </div>
+        <div class="input-label">Messages</div>
+        <div class="messages-area" id="msg-area">
+          <div class="msg-row"><span class="msg-side-label">Them</span><div class="msg-input-wrap"><input type="text" placeholder="Message..." value="Hey! Did you see the new MockDrop launch? 🔥" data-side="received"></div></div>
+          <div class="msg-row"><span class="msg-side-label">You</span><div class="msg-input-wrap"><input type="text" placeholder="Message..." value="Just saw it — looks insane. Watermark-free too!" data-side="sent"></div></div>
+          <div class="msg-row"><span class="msg-side-label">Them</span><div class="msg-input-wrap"><input type="text" placeholder="Message..." value="We need this for our marketing assets fr 😭" data-side="received"></div></div>
+        </div>
+        <button class="add-msg-btn" onclick="addMessage()">+ Add message</button>
+        <button class="ai-gen-btn" onclick="generateWithAI()"><span class="ai-icon">✦</span>Generate conversation with AI</button>
+        <button class="gen-preview-btn" onclick="renderPreview()">↓ Update Preview</button>
+      </div>
+      <div class="builder-preview">
+        <div class="preview-header">
+          <span class="preview-label">Live Preview</span>
+          <button class="download-btn" onclick="openModal('Export PNG','Download your mockup','Sign up free to export full-resolution PNG files — zero watermarks, always.')">↓ Export PNG</button>
+        </div>
+        <div class="phone-frame" id="phone-frame">
+          <div id="preview-wa">
+            <div class="chat-status-bar"><span class="time">9:41</span><span style="font-size:9px;color:rgba(255,255,255,.5)">●●●</span></div>
+            <div class="wa-header"><div class="wa-avatar" id="wa-av">J</div><div><div class="wa-name" id="wa-name">Jordan</div><div class="wa-status">online</div></div></div>
+            <div class="wa-body dark" id="wa-body"></div>
+            <div class="wa-input-row"><div class="wa-msg-box"></div></div>
+          </div>
+          <div id="preview-tw" style="display:none">
+            <div class="chat-status-bar"><span class="time">9:41</span></div>
+            <div class="tw-header"><span class="tw-back">←</span><div><div class="tw-header-name" id="tw-hname">Jordan</div><div class="tw-header-handle" id="tw-hhandle">@jordan</div></div></div>
+            <div class="tw-body dark" id="tw-body"></div>
+          </div>
+          <div id="preview-ai" style="display:none">
+            <div class="chat-status-bar"><span class="time">9:41</span></div>
+            <div class="ai-header" id="ai-header"><div class="ai-logo">✦</div><div class="ai-title">ChatGPT</div></div>
+            <div class="ai-body dark" id="ai-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-header">
+    <div><div class="section-label">Why MockDrop</div><div class="section-title">Built different.<br>Designed to ship.</div></div>
+    <p style="font-size:.95rem;color:rgba(245,242,236,.4);line-height:1.7;font-weight:300">We didn't just build another screenshot tool. MockDrop is an end-to-end mockup engine with AI at the core — built for founders, marketers, and creators who move fast.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card big">
+      <div>
+        <div class="feature-icon icon-green">✦</div>
+        <h3>AI Conversation Writer</h3>
+        <p>Describe the scene — "excited customer after buying our product" — and our AI generates a full, realistic, platform-native conversation in seconds.</p>
+        <div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
+          <span style="background:rgba(116,170,156,.12);border:1px solid rgba(116,170,156,.2);border-radius:100px;padding:.2rem .65rem;font-size:.72rem;color:var(--ai);font-family:'DM Mono',monospace">Powered by Claude</span>
+          <span style="background:rgba(232,255,71,.08);border:1px solid rgba(232,255,71,.15);border-radius:100px;padding:.2rem .65rem;font-size:.72rem;color:var(--accent);font-family:'DM Mono',monospace">Any platform</span>
+        </div>
+      </div>
+      <div class="feature-visual">
+        <div class="convo-line"><div class="convo-av" style="background:#25D366">S</div><div class="convo-bubble">This product literally changed how I work 🙌</div></div>
+        <div class="convo-line" style="justify-content:flex-end"><div class="convo-bubble">Glad it's working! Which feature helped most?</div><div class="convo-av" style="background:#1DA1F2">M</div></div>
+        <div class="convo-line"><div class="convo-av" style="background:#25D366">S</div><div class="convo-bubble">The AI auto-fill is unreal. Saves me an hour every session.</div></div>
+        <div style="border-top:1px solid rgba(255,255,255,.05);margin-top:6px;padding-top:6px"><div class="convo-bubble ai-bubble" style="max-width:100%">✦ AI generated 3 messages in 1.2s</div></div>
+      </div>
+    </div>
+    <div class="feature-card"><div class="feature-icon icon-blue">⬡</div><h3>Pixel-Perfect Realism</h3><p>Every platform rendered to spec — correct fonts, bubble shapes, status bars, and timestamps. Passes the screenshot test every time.</p></div>
+    <div class="feature-card"><div class="feature-icon icon-orange">◐</div><h3>Real-time Dark / Light</h3><p>Toggle modes instantly and see both versions live. Export either or both for your marketing assets.</p></div>
+    <div class="feature-card"><div class="feature-icon icon-yellow">◈</div><h3>Zero Watermarks, Ever</h3><p>On every plan, including free. Your marketing assets shouldn't advertise someone else's tool.</p></div>
+    <div class="feature-card"><div class="feature-icon icon-purple">⬡</div><h3>Cloud Save & Share</h3><p>Projects auto-save to the cloud. Share a live link or export high-res PNG / SVG in one click.</p></div>
+  </div>
+</section>
+
+<!-- PLATFORMS -->
+<section class="platforms">
+  <div class="section-label">Supported Platforms</div>
+  <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,3.5vw,3rem);line-height:1;margin-bottom:.5rem">35+ platforms. Pixel-perfect.</div>
+  <div class="platform-logos">
+    <div class="platform-logo-card"><div class="plat-icon" style="background:rgba(37,211,102,.1)">💬</div><div class="plat-name">WhatsApp</div></div>
+    <div class="platform-logo-card"><div class="plat-icon" style="background:rgba(29,161,242,.1);font-size:18px;font-weight:700;color:#1DA1F2;font-family:serif">𝕏</div><div class="plat-name">Twitter / X</div></div>
+    <div class="platform-logo-card"><div class="plat-icon" style="background:rgba(225,48,108,.1)">📸</div><div class="plat-name">Instagram</div></div>
+    <div class="platform-logo-card"><div class="plat-icon" style="background:rgba(116,170,156,.1);color:var(--ai);font-size:16px">✦</div><div class="plat-name">ChatGPT</div></div>
+    <div class="platform-logo-card"><div class="plat-icon" style="background:rgba(10,102,194,.1);font-size:17px;font-weight:700;color:#0A66C2;font-family:sans-serif">in</div><div class="plat-name">LinkedIn</div></div>
+    <div class="more-plats"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:rgba(245,242,236,.25)">+30</div><div>more</div></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-label" style="text-align:center;margin-bottom:.5rem">Pricing</div>
+  <div class="section-title">Simple. Honest. No tricks.</div>
+  <p class="section-sub" style="max-width:400px;margin:0 auto">No credit card required to start. Upgrade when you need more.</p>
+  <div class="pricing-cards">
+    <div class="price-card">
+      <div class="plan-name">Free</div>
+      <div class="price-amount">$0 <span>/ mo</span></div>
+      <div class="price-sub">Forever free</div>
+      <ul class="price-features">
+        <li>10 exports per month</li><li>5 platforms</li><li>Dark & light modes</li>
+        <li class="disabled">AI conversation writer</li><li class="disabled">Cloud save</li><li class="disabled">Custom branding</li>
+      </ul>
+      <button class="plan-btn" onclick="openModal('Free Plan','Start for free today','Tell us about yourself and we\'ll set up your free MockDrop account right away.')">Get Started</button>
+    </div>
+    <div class="price-card featured">
+      <div class="popular-badge">Most Popular</div>
+      <div class="plan-name">Pro</div>
+      <div class="price-amount">$12 <span>/ mo</span></div>
+      <div class="price-sub">Billed monthly</div>
+      <ul class="price-features">
+        <li>Unlimited exports</li><li>All 35+ platforms</li><li>Dark & light modes</li>
+        <li>AI conversation writer</li><li>Cloud save & share links</li><li class="disabled">Custom branding</li>
+      </ul>
+      <button class="plan-btn featured-btn" onclick="openModal('Pro Plan','Start your free trial','Fill in your details and we\'ll get your Pro account ready — no card needed for the trial.')">Start Free Trial</button>
+    </div>
+    <div class="price-card">
+      <div class="plan-name">Team</div>
+      <div class="price-amount">$29 <span>/ mo</span></div>
+      <div class="price-sub">Up to 5 members</div>
+      <ul class="price-features">
+        <li>Everything in Pro</li><li>Custom branding & logos</li><li>Brand kit (colors, fonts)</li>
+        <li>Priority support</li><li>API access</li><li>Bulk export</li>
+      </ul>
+      <button class="plan-btn" onclick="openModal('Team Plan','Team plan enquiry','Tell us about your team size and use case, and we\'ll prepare a custom onboarding for you.')">Get Team Access</button>
+    </div>
+  </div>
+</section>
+
+<!-- CREATOR -->
+<section class="creator" id="about">
+  <div class="section-label">About Us</div>
+  <div class="section-title" style="margin-bottom:2rem">Meet the creator</div>
+  <div class="creator-inner">
+    <div class="creator-avatar-wrap">
+      <div class="creator-avatar">AR</div>
+      <div class="creator-socials">
+        <a class="social-pill" href="#">Twitter</a>
+        <a class="social-pill" href="#">LinkedIn</a>
+        <a class="social-pill" href="#">GitHub</a>
+      </div>
+    </div>
+    <div>
+      <div class="creator-tag">Founder & CEO</div>
+      <div class="creator-name">Aryan Mehta</div>
+      <div class="creator-designation">Product Designer turned Full-Stack Maker</div>
+      <p class="creator-bio">Aryan spent four years building marketing assets for early-stage SaaS companies, and every single time, he found himself wrestling with Photoshop for hours just to produce a simple, convincing WhatsApp screenshot. The process was slow, painful, and utterly unnecessary — so he decided to build the tool he always wished existed.</p>
+      <p class="creator-bio" style="margin-top:.9rem">MockDrop was born in a single weekend hackathon and shipped to Product Hunt six weeks later. What started as a personal itch has since grown into the go-to mockup engine for over 2,000 creators, marketers, and founders across 40+ countries. Aryan believes that great marketing shouldn't require a design degree — that AI should handle the busywork so teams can focus on telling better stories. He's deeply committed to keeping MockDrop honest: no dark patterns, no hidden fees, and no watermarks on the free plan, ever. When he's not shipping features, you'll find him experimenting with generative design, hiking somewhere with no WiFi, or mentoring fellow indie hackers on their first Product Hunt launch.</p>
+      <div class="creator-stats">
+        <div class="stat-item"><div class="stat-num">2K+</div><div class="stat-label">Users worldwide</div></div>
+        <div class="stat-item"><div class="stat-num">40+</div><div class="stat-label">Countries</div></div>
+        <div class="stat-item"><div class="stat-num">35+</div><div class="stat-label">Platforms</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="section-label">Get in Touch</div>
+  <div class="section-title">Contact Us</div>
+  <div class="contact-inner">
+    <div class="contact-info">
+      <p style="font-size:.9rem;color:rgba(245,242,236,.45);line-height:1.7;font-weight:300;margin-bottom:.5rem">Have a question, feature request, or just want to say hello? We'd love to hear from you. Our team typically responds within 24 hours.</p>
+      <div class="contact-item"><div class="contact-icon">✉</div><div><div class="contact-detail-label">Email</div><div class="contact-detail-val">hello@mockdrop.io</div></div></div>
+      <div class="contact-item"><div class="contact-icon">☎</div><div><div class="contact-detail-label">Phone</div><div class="contact-detail-val">+91 98765 43210</div></div></div>
+      <div class="contact-item"><div class="contact-icon">⊙</div><div><div class="contact-detail-label">Office</div><div class="contact-detail-val">Koramangala 4th Block,<br>Bengaluru, Karnataka,<br>India — 560034</div></div></div>
+    </div>
+    <div class="contact-form-box">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;margin-bottom:.25rem">Send us a message</div>
+      <p style="font-size:.78rem;color:rgba(245,242,236,.3);margin-bottom:1.5rem;font-family:'DM Mono',monospace">We'll get back to you within 24 hours.</p>
+      <div id="contact-form-inner">
+        <div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-input" placeholder="Jane Smith"></div>
+        <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="jane@company.com"></div>
+        <div class="form-group"><label class="form-label">Subject</label><input type="text" class="form-input" placeholder="Feature request, bug report, or just hi!"></div>
+        <div class="form-group"><label class="form-label">Message</label><textarea class="form-input" style="resize:vertical;min-height:96px" placeholder="What's on your mind?"></textarea></div>
+        <button class="form-submit" onclick="submitContact()">Send Message →</button>
+      </div>
+      <div id="contact-success" style="display:none;text-align:center;padding:2rem 0">
+        <div style="font-size:2.5rem;margin-bottom:1rem">✦</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--accent);margin-bottom:.5rem">We'll inform you!</div>
+        <p style="font-size:.88rem;color:rgba(245,242,236,.45);line-height:1.65">Thanks for getting in touch. Our team responds within 24 hours. Watch your inbox!</p>
+        <button onclick="resetContact()" style="margin-top:1.5rem;background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:7px;color:rgba(245,242,236,.5);font-size:.82rem;padding:.5rem 1.25rem;cursor:pointer;font-family:'DM Sans',sans-serif">Send another message</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg"></div>
+  <div class="cta-content">
+    <div class="cta-title">Your next mockup<br>is <em style="font-style:normal;color:var(--accent)">10 seconds away.</em></div>
+    <p class="cta-sub">No Photoshop. No watermarks. No excuses.</p>
+    <button class="btn-primary" style="font-size:1rem;padding:1rem 2.5rem;border:none" onclick="openModal('Get Started Free','Drop your first mock','Tell us about yourself and we\'ll have you generating mockups in minutes — free forever.')">Drop Your First Mock →</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo-wrap">
+        <div class="footer-logo-icon">M</div>
+        <div class="footer-logo-text">Mock<span>Drop</span></div>
+      </div>
+      <p class="footer-tagline">Bridging the gap between ideas and viral marketing through hyper-realistic AI mockups.</p>
+      <a href="#" class="footer-ph-btn">
+        <div class="footer-ph-icon">P</div>
+        <div class="footer-ph-text">
+          <span class="footer-ph-sub">Leave a review on</span>
+          <span class="footer-ph-main">Product Hunt</span>
+        </div>
+      </a>
+    </div>
+    <div>
+      <div class="footer-col-title">Quick Links</div>
+      <ul class="footer-links-list">
+        <li><a href="#">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links-list">
+        <li><a href="#about">About Us</a></li>
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="terms-conditions.html">Terms & Conditions</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contact Us</div>
+      <div class="footer-contact-list">
+        <div class="footer-contact-item"><div class="footer-contact-ic">✉</div><div class="footer-contact-text">hello@mockdrop.io</div></div>
+        <div class="footer-contact-item"><div class="footer-contact-ic">☎</div><div class="footer-contact-text">+91 98765 43210</div></div>
+        <div class="footer-contact-item"><div class="footer-contact-ic">⊙</div><div class="footer-contact-text">Koramangala 4th Block, Bengaluru, Karnataka, India 560034</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 MockDrop. All rights reserved.</p></div>
+</footer>
+
+<script>
+const API = 'https://api.anthropic.com/v1/messages';
+let plat = 'wa', mode = 'dark';
+
+/* MODAL */
+function openModal(tag,title,sub) {
+  document.getElementById('modal-tag').textContent = tag;
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-sub').textContent = sub||'Fill in your details and we\'ll be in touch shortly.';
+  document.getElementById('modal-fields').style.display = 'block';
+  document.getElementById('modal-success').className = 'modal-success';
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); document.body.style.overflow = ''; }
+function closeModalOutside(e) { if (e.target.id === 'modal-overlay') closeModal(); }
+function submitModal() { document.getElementById('modal-fields').style.display = 'none'; document.getElementById('modal-success').classList.add('show'); }
+
+/* MOBILE NAV */
+function toggleMobile() { document.getElementById('mobile-menu').classList.toggle('open'); }
+function closeMobile() { document.getElementById('mobile-menu').classList.remove('open'); }
+
+/* CONTACT FORM */
+function submitContact() { document.getElementById('contact-form-inner').style.display = 'none'; document.getElementById('contact-success').style.display = 'block'; }
+function resetContact() { document.getElementById('contact-form-inner').style.display = 'block'; document.getElementById('contact-success').style.display = 'none'; }
+
+/* DEMO */
+function switchPlatform(p,btn) { plat=p; document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderPreview(); }
+function switchMode(m,btn) { mode=m; document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); applyMode(); }
+function applyMode() {
+  document.getElementById('phone-frame').classList.toggle('light-mode', mode==='light');
+  ['wa-body','tw-body','ai-body'].forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    if (mode==='dark'){el.classList.add('dark');el.classList.remove('light')}
+    else{el.classList.remove('dark');el.classList.add('light')}
+  });
+  const aih = document.getElementById('ai-header');
+  if (aih){aih.style.background=mode==='light'?'#F5F5F5':'';aih.style.borderColor=mode==='light'?'rgba(0,0,0,.06)':''}
+}
+function getMsgs() {
+  return Array.from(document.querySelectorAll('#msg-area .msg-input-wrap input')).filter(i=>i.value.trim()).map(i=>({text:i.value.trim(),side:i.dataset.side}));
+}
+function addMessage() {
+  const area = document.getElementById('msg-area');
+  const rows = area.querySelectorAll('.msg-row');
+  const lastInp = rows.length ? rows[rows.length-1].querySelector('input') : null;
+  const ns = (lastInp&&lastInp.dataset.side==='sent') ? 'received' : 'sent';
+  const row = document.createElement('div'); row.className='msg-row';
+  row.innerHTML=`<span class="msg-side-label">${ns==='sent'?'You':'Them'}</span><div class="msg-input-wrap"><input type="text" placeholder="Message..." data-side="${ns}" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:.55rem .85rem;color:#F5F2EC;font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;width:100%"></div>`;
+  area.appendChild(row); row.querySelector('input').focus();
+}
+function renderPreview() {
+  const ny = document.getElementById('name-you').value||'You';
+  const nt = document.getElementById('name-them').value||'Them';
+  const msgs = getMsgs();
+  ['preview-wa','preview-tw','preview-ai'].forEach(id=>document.getElementById(id).style.display='none');
+  const ts = ['9:41','9:42','9:42','9:43','9:44','9:45'];
+  if (plat==='wa') {
+    document.getElementById('preview-wa').style.display='block';
+    document.getElementById('wa-name').textContent=nt;
+    document.getElementById('wa-av').textContent=nt[0]||'?';
+    const body=document.getElementById('wa-body'); body.innerHTML='';
+    msgs.forEach((m,i)=>{const b=document.createElement('div');b.className=`wa-bubble ${m.side}`;b.innerHTML=`${m.text}<div class="wa-time">${ts[i]||'9:45'} AM</div>`;body.appendChild(b)});
+  } else if (plat==='tw') {
+    document.getElementById('preview-tw').style.display='block';
+    document.getElementById('tw-hname').textContent=nt;
+    document.getElementById('tw-hhandle').textContent='@'+nt.toLowerCase();
+    const body=document.getElementById('tw-body'); body.innerHTML='';
+    msgs.forEach(m=>{const n=m.side==='sent'?ny:nt;const c=document.createElement('div');c.className='tweet-card';c.innerHTML=`<div class="tw-user-row"><div class="tw-av">${n[0]}</div><div><div class="tw-uname">${n}</div><div class="tw-handle">@${n.toLowerCase()}</div></div></div><div class="tweet-text">${m.text}</div><div class="tweet-stats"><span>${Math.floor(Math.random()*999+10)} likes</span><span>${Math.floor(Math.random()*200+5)} RTs</span></div>`;body.appendChild(c)});
+  } else if (plat==='ai') {
+    document.getElementById('preview-ai').style.display='block';
+    const body=document.getElementById('ai-body'); body.innerHTML='';
+    msgs.forEach(m=>{const isU=m.side==='sent';const d=document.createElement('div');d.className='ai-msg';d.innerHTML=`<div class="ai-role">${isU?'you':'assistant'}</div><div class="ai-text ${!isU?'assistant-msg':''}">${m.text}</div>`;body.appendChild(d)});
+  }
+  applyMode();
+}
+async function generateWithAI() {
+  const ny=document.getElementById('name-you').value||'Alex';
+  const nt=document.getElementById('name-them').value||'Jordan';
+  const pm={wa:'WhatsApp',tw:'Twitter DM',ai:'ChatGPT'};
+  const status=document.getElementById('ai-status'); status.classList.add('show');
+  try {
+    const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:`Generate a realistic ${pm[plat]} conversation between "${ny}" and "${nt}" for a marketing mockup. 4-6 messages. Topic: great product/service experience. Respond ONLY with a JSON array (no markdown, no explanation):\n[{"side":"received","text":"..."}]\n"received"=from ${nt},"sent"=from ${ny}.`}]})});
+    const data=await res.json();
+    const raw=data.content.map(c=>c.text||'').join('');
+    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    const area=document.getElementById('msg-area'); area.innerHTML='';
+    parsed.forEach(msg=>{const row=document.createElement('div');row.className='msg-row';row.innerHTML=`<span class="msg-side-label">${msg.side==='sent'?'You':'Them'}</span><div class="msg-input-wrap"><input type="text" value="${msg.text.replace(/"/g,'&quot;')}" data-side="${msg.side}" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:.55rem .85rem;color:#F5F2EC;font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;width:100%"></div>`;area.appendChild(row)});
+    renderPreview();
+  } catch(e){console.error(e)}
+  finally{status.classList.remove('show')}
+}
+renderPreview();
+</script>
+</body>
+</html>
