@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MockDrop — AI Social Mockup Generator</title>
+<title>MockDrop — AI Pitch Deck Roaster</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -28,6 +28,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:cen
 .mobile-menu.open{display:flex}
 .mobile-menu a{color:rgba(245,242,236,.7);text-decoration:none;font-size:1rem;padding:.5rem 0;border-bottom:1px solid var(--border)}
 .mobile-menu a:last-of-type{border-bottom:none}
+.mobile-cta{display:none}
 
 /* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:1rem}
@@ -44,7 +45,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:cen
 .form-input{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.7rem 1rem;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .15s;width:100%}
 .form-input:focus{border-color:rgba(232,255,71,.4)}
 .form-input::placeholder{color:rgba(245,242,236,.18)}
-textarea.form-input{resize:vertical;min-height:96px}
 .form-submit{background:var(--accent);color:var(--black);border:none;border-radius:8px;padding:.85rem;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:opacity .15s,transform .15s;width:100%;margin-top:.25rem}
 .form-submit:hover{opacity:.88;transform:translateY(-1px)}
 .modal-success{display:none;text-align:center;padding:1rem 0}
@@ -55,25 +55,24 @@ textarea.form-input{resize:vertical;min-height:96px}
 
 /* HERO */
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8rem 2rem 4rem;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 60% 40% at 70% 20%,rgba(232,255,71,.07) 0%,transparent 70%),radial-gradient(ellipse 50% 50% at 20% 80%,rgba(255,107,53,.06) 0%,transparent 65%)}
+.hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 60% 40% at 70% 20%,rgba(255,107,53,.08) 0%,transparent 70%),radial-gradient(ellipse 50% 50% at 20% 80%,rgba(232,255,71,.06) 0%,transparent 65%)}
 .hero-grid{position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 80%)}
 .hero-content{position:relative;z-index:1;text-align:center;max-width:860px}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(232,255,71,.1);border:1px solid rgba(232,255,71,.25);border-radius:100px;padding:.35rem 1rem;font-size:.78rem;font-weight:500;color:var(--accent);letter-spacing:.05em;text-transform:uppercase;margin-bottom:1.8rem}
-.hero-badge::before{content:'';width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.28);border-radius:100px;padding:.35rem 1rem;font-size:.78rem;font-weight:500;color:var(--accent2);letter-spacing:.05em;text-transform:uppercase;margin-bottom:1.8rem}
+.hero-badge::before{content:'';width:6px;height:6px;background:var(--accent2);border-radius:50%;animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
 h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,9vw,8rem);line-height:.92;letter-spacing:.01em;margin-bottom:1.5rem}
 h1 em{font-style:normal;color:var(--accent);display:block}
-.hero-sub{font-size:1.1rem;font-weight:300;color:rgba(245,242,236,.6);line-height:1.65;max-width:520px;margin:0 auto 2.5rem}
-.hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:4rem}
-.btn-primary{background:var(--accent);color:var(--black);font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;padding:.85rem 2rem;border:none;border-radius:8px;cursor:pointer;transition:transform .15s,box-shadow .15s;text-decoration:none;display:inline-block}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(232,255,71,.2)}
+.hero-sub{font-size:1.1rem;font-weight:300;color:rgba(245,242,236,.6);line-height:1.65;max-width:540px;margin:0 auto 2.5rem}
+.hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3.5rem}
+.btn-primary{background:var(--accent2);color:#fff;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;padding:.85rem 2rem;border:none;border-radius:8px;cursor:pointer;transition:transform .15s,box-shadow .15s;text-decoration:none;display:inline-block}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,107,53,.25)}
 .btn-ghost{background:transparent;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:400;padding:.85rem 2rem;border:1px solid rgba(255,255,255,.15);border-radius:8px;cursor:pointer;transition:border-color .2s,background .2s;text-decoration:none;display:inline-block}
 .btn-ghost:hover{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.04)}
-.platform-pills{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem}
+.stage-pills{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:.75rem}
 .pill{display:flex;align-items:center;gap:6px;padding:.35rem .85rem;border:1px solid var(--border);border-radius:100px;font-size:.78rem;color:rgba(245,242,236,.45);font-family:'DM Mono',monospace}
-.pill svg{flex-shrink:0}
-.mobile-cta{display:none}
-.platforms-note{font-size:.78rem;color:rgba(245,242,236,.3);margin-top:.5rem}
+.pill-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.platforms-note{font-size:.78rem;color:rgba(245,242,236,.28);margin-top:.35rem}
 
 /* SECTION */
 .section-label{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--accent2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem}
@@ -82,163 +81,136 @@ h1 em{font-style:normal;color:var(--accent);display:block}
 
 /* DEMO */
 .demo{padding:5rem 2rem;max-width:1100px;margin:0 auto}
-.demo-builder{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;overflow:hidden}
-.builder-toolbar{display:flex;align-items:center;gap:1.5rem;padding:1rem 1.5rem;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);flex-wrap:wrap}
-.toolbar-label{font-size:.75rem;color:rgba(245,242,236,.35);font-family:'DM Mono',monospace}
-.platform-tabs{display:flex;gap:.4rem;flex:1;flex-wrap:wrap}
-.ptab{padding:.35rem .85rem;border-radius:6px;font-size:.8rem;font-weight:500;cursor:pointer;border:1px solid transparent;background:transparent;color:rgba(245,242,236,.4);font-family:'DM Sans',sans-serif;transition:all .15s}
-.ptab:hover{background:rgba(255,255,255,.06);color:var(--white)}
-.ptab.active{background:rgba(232,255,71,.1);border-color:rgba(232,255,71,.3);color:var(--accent)}
-.mode-toggle{display:flex;gap:.25rem;background:rgba(255,255,255,.05);border-radius:6px;padding:3px}
-.mtab{padding:.3rem .7rem;border-radius:4px;font-size:.75rem;cursor:pointer;border:none;background:transparent;color:rgba(245,242,236,.35);font-family:'DM Sans',sans-serif;transition:all .15s}
-.mtab.active{background:var(--card-bg);color:var(--white)}
-.builder-body{display:grid;grid-template-columns:1fr 1.2fr;min-height:520px}
-.builder-input{padding:1.5rem;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:1rem}
-.input-label{font-size:.72rem;color:rgba(245,242,236,.35);font-family:'DM Mono',monospace;letter-spacing:.05em;text-transform:uppercase}
-.participants-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
-.field-group{display:flex;flex-direction:column;gap:6px}
-input[type="text"],input[type="email"]{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:.55rem .85rem;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;width:100%;transition:border-color .15s}
-input[type="text"]:focus,input[type="email"]:focus{border-color:rgba(232,255,71,.4)}
-input::placeholder{color:rgba(245,242,236,.2)}
-.messages-area{flex:1;display:flex;flex-direction:column;gap:.5rem;overflow-y:auto;max-height:190px}
-.msg-row{display:flex;gap:8px;align-items:flex-end}
-.msg-side-label{font-size:.7rem;color:rgba(245,242,236,.3);font-family:'DM Mono',monospace;min-width:32px;flex-shrink:0}
-.msg-input-wrap{flex:1}
-.add-msg-btn{background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.1);border-radius:7px;color:rgba(245,242,236,.3);font-size:.8rem;padding:.45rem 1rem;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;transition:all .15s}
-.add-msg-btn:hover{border-color:rgba(232,255,71,.3);color:var(--accent)}
-.ai-gen-btn{background:rgba(116,170,156,.12);border:1px solid rgba(116,170,156,.25);border-radius:7px;color:var(--ai);font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;padding:.6rem 1rem;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px;width:100%;justify-content:center}
-.ai-gen-btn:hover{background:rgba(116,170,156,.2)}
-.ai-icon{width:14px;height:14px;border-radius:50%;background:var(--ai);display:inline-flex;align-items:center;justify-content:center;font-size:8px;color:var(--black);font-weight:700;flex-shrink:0}
-.gen-preview-btn{background:var(--accent);border:none;border-radius:8px;color:var(--black);font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;padding:.75rem;cursor:pointer;transition:opacity .15s,transform .15s;display:flex;align-items:center;gap:8px;justify-content:center;width:100%}
-.gen-preview-btn:hover{opacity:.88;transform:translateY(-1px)}
-.builder-preview{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:1.5rem;background:rgba(0,0,0,.3);overflow:hidden}
-.preview-header{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:1rem}
-.preview-label{font-size:.7rem;color:rgba(245,242,236,.3);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em}
-.download-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:rgba(245,242,236,.5);font-size:.75rem;font-family:'DM Sans',sans-serif;padding:.35rem .75rem;cursor:pointer;transition:all .15s}
-.download-btn:hover{color:var(--white);border-color:rgba(255,255,255,.25)}
-.phone-frame{width:220px;background:#1A1A1A;border-radius:32px;border:3px solid rgba(255,255,255,.12);overflow:hidden;box-shadow:0 32px 64px rgba(0,0,0,.5);transition:all .3s ease}
-.phone-frame.light-mode{background:#fff;border-color:rgba(0,0,0,.15)}
-.chat-status-bar{height:24px;background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:space-between;padding:0 12px}
-.chat-status-bar .time{font-size:9px;font-weight:600;color:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif}
-.phone-frame.light-mode .chat-status-bar{background:rgba(0,0,0,.03)}
-.phone-frame.light-mode .time{color:rgba(0,0,0,.6)}
-.wa-header{background:#128C7E;padding:8px 10px;display:flex;align-items:center;gap:8px}
-.wa-avatar{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;font-family:'DM Sans',sans-serif;flex-shrink:0}
-.wa-name{font-size:11px;font-weight:600;color:#fff;font-family:'DM Sans',sans-serif}
-.wa-status{font-size:8px;color:rgba(255,255,255,.65);font-family:'DM Sans',sans-serif}
-.wa-body{background:#E5DDD5;padding:8px;min-height:300px;display:flex;flex-direction:column;gap:4px}
-.wa-body.dark{background:#0D1117}
-.wa-bubble{max-width:78%;padding:5px 8px;border-radius:8px;font-size:9px;font-family:'DM Sans',sans-serif;line-height:1.4}
-.wa-bubble.received{background:#fff;color:#111;align-self:flex-start;border-top-left-radius:2px}
-.wa-bubble.sent{background:#DCF8C6;color:#111;align-self:flex-end;border-top-right-radius:2px}
-.wa-body.dark .wa-bubble.received{background:#1E2A35;color:#E8E8E8}
-.wa-body.dark .wa-bubble.sent{background:#005C4B;color:#E8E8E8}
-.wa-time{font-size:7px;color:rgba(0,0,0,.35);margin-top:2px;text-align:right}
-.wa-body.dark .wa-time{color:rgba(255,255,255,.35)}
-.wa-input-row{background:rgba(255,255,255,.05);padding:5px 8px;display:flex;align-items:center;gap:5px}
-.wa-msg-box{background:rgba(255,255,255,.08);border-radius:18px;height:20px;flex:1;border:none}
-.tw-header{background:#15202B;padding:10px;display:flex;align-items:center;gap:6px}
-.tw-back{font-size:14px;color:#1DA1F2}
-.tw-header-name{font-size:11px;font-weight:700;color:#fff;font-family:'DM Sans',sans-serif}
-.tw-header-handle{font-size:9px;color:rgba(255,255,255,.4);font-family:'DM Sans',sans-serif}
-.tw-body{background:#15202B;padding:10px;min-height:300px;display:flex;flex-direction:column;gap:8px}
-.tw-body.light{background:#fff}
-.tweet-card{border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px}
-.tw-body.light .tweet-card{border-color:rgba(0,0,0,.08)}
-.tw-user-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
-.tw-av{width:28px;height:28px;border-radius:50%;background:#1DA1F2;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;font-family:'DM Sans',sans-serif;flex-shrink:0}
-.tw-uname{font-size:10px;font-weight:700;color:#fff;font-family:'DM Sans',sans-serif}
-.tw-handle{font-size:9px;color:rgba(255,255,255,.4);font-family:'DM Sans',sans-serif}
-.tw-body.light .tw-uname{color:#111}
-.tw-body.light .tw-handle{color:rgba(0,0,0,.4)}
-.tweet-text{font-size:10px;line-height:1.5;color:rgba(255,255,255,.9);margin-bottom:6px;font-family:'DM Sans',sans-serif}
-.tw-body.light .tweet-text{color:#111}
-.tweet-stats{display:flex;gap:12px;font-size:8px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace}
-.tw-body.light .tweet-stats{color:rgba(0,0,0,.35)}
-.ai-body{background:#212121;min-height:300px;padding:10px;display:flex;flex-direction:column;gap:8px}
-.ai-body.light{background:#F9F9F9}
-.ai-msg{display:flex;flex-direction:column;gap:4px}
-.ai-role{font-size:7px;letter-spacing:.08em;text-transform:uppercase;font-family:'DM Mono',monospace;color:rgba(255,255,255,.3)}
-.ai-body.light .ai-role{color:rgba(0,0,0,.3)}
-.ai-text{font-size:9px;line-height:1.5;color:rgba(255,255,255,.85);font-family:'DM Sans',sans-serif;padding:7px 9px;border-radius:8px;background:rgba(255,255,255,.04)}
-.ai-body.light .ai-text{background:rgba(0,0,0,.04);color:#111}
-.ai-text.assistant-msg{background:rgba(116,170,156,.12);border-left:2px solid var(--ai)}
-.ai-header{background:#171717;padding:8px 10px;display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(255,255,255,.06)}
-.ai-logo{width:18px;height:18px;border-radius:4px;background:var(--ai);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#1A1A1A;font-family:'DM Mono',monospace}
-.ai-title{font-size:9px;font-weight:600;color:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif}
-.ai-generating{display:none;align-items:center;gap:8px;font-size:.78rem;color:var(--ai);font-family:'DM Mono',monospace;padding:.5rem 0}
-.ai-generating.show{display:flex}
-.dots{display:flex;gap:3px}
-.dots span{width:5px;height:5px;border-radius:50%;background:var(--ai);animation:bounce 1.2s ease-in-out infinite}
+.roast-builder{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:grid;grid-template-columns:1fr 1.1fr;min-height:500px}
+.roast-input{padding:1.75rem;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:1.1rem}
+.input-label{font-size:.72rem;color:rgba(245,242,236,.35);font-family:'DM Mono',monospace;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}
+.sector-tabs{display:flex;gap:.35rem;flex-wrap:wrap}
+.stab{padding:.3rem .7rem;border-radius:6px;font-size:.78rem;font-weight:500;cursor:pointer;border:1px solid transparent;background:transparent;color:rgba(245,242,236,.4);font-family:'DM Sans',sans-serif;transition:all .15s}
+.stab:hover{background:rgba(255,255,255,.06);color:var(--white)}
+.stab.active{background:rgba(255,107,53,.1);border-color:rgba(255,107,53,.3);color:var(--accent2)}
+.pitch-textarea{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:1rem;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;line-height:1.65;resize:none;outline:none;width:100%;height:148px;transition:border-color .15s}
+.pitch-textarea:focus{border-color:rgba(255,107,53,.3)}
+.pitch-textarea::placeholder{color:rgba(245,242,236,.18);font-style:italic}
+.examples-label{font-size:.65rem;color:rgba(245,242,236,.25);font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.example-prompts{display:flex;flex-direction:column;gap:.35rem}
+.example-prompt{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:7px;padding:.45rem .7rem;font-size:.76rem;color:rgba(245,242,236,.3);font-family:'DM Mono',monospace;cursor:pointer;text-align:left;transition:all .15s;line-height:1.4}
+.example-prompt:hover{border-color:rgba(255,107,53,.25);color:rgba(255,107,53,.7);background:rgba(255,107,53,.04)}
+.roast-btn{background:var(--accent2);border:none;border-radius:8px;color:#fff;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;padding:.82rem;cursor:pointer;transition:opacity .15s,transform .15s;display:flex;align-items:center;gap:8px;justify-content:center;width:100%}
+.roast-btn:hover{opacity:.88;transform:translateY(-1px)}
+.flame-icon{font-size:1rem}
+
+/* ROAST OUTPUT */
+.roast-output{padding:1.75rem;display:flex;flex-direction:column;background:rgba(0,0,0,.28);position:relative}
+.roast-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:.85rem;text-align:center;padding:2rem;opacity:1}
+.placeholder-ring{width:72px;height:72px;border-radius:50%;border:1.5px dashed rgba(255,107,53,.2);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto;animation:spin 12s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.placeholder-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:rgba(245,242,236,.18);line-height:1;margin-top:.25rem}
+.placeholder-sub{font-size:.75rem;color:rgba(245,242,236,.18);font-family:'DM Mono',monospace;line-height:1.55;max-width:200px}
+
+.roast-generating{display:none;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:1rem;padding:2rem;text-align:center}
+.roast-generating.show{display:flex}
+.vc-thinking{font-family:'DM Mono',monospace;font-size:.78rem;color:rgba(245,242,236,.35);margin-top:.25rem}
+.dots{display:flex;gap:4px;justify-content:center}
+.dots span{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:bounce 1.2s ease-in-out infinite}
 .dots span:nth-child(2){animation-delay:.2s}
 .dots span:nth-child(3){animation-delay:.4s}
-@keyframes bounce{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-4px);opacity:1}}
+@keyframes bounce{0%,100%{transform:translateY(0);opacity:.35}50%{transform:translateY(-5px);opacity:1}}
+
+.roast-card{display:none;flex-direction:column;gap:.9rem;animation:fadeIn .3s ease}
+.roast-card.show{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.vc-session-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.vc-label{font-family:'DM Mono',monospace;font-size:.65rem;color:rgba(245,242,236,.28);letter-spacing:.1em;text-transform:uppercase}
+.vc-badge{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--accent2);background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.2);border-radius:4px;padding:.15rem .5rem}
+.score-block{display:flex;align-items:center;gap:1rem}
+.score-bar-wrap{flex:1}
+.score-bar-track{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:3px;transition:width .7s ease,background .4s ease}
+.score-num{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--white);line-height:1;min-width:58px;text-align:right}
+.verdict-text{font-size:.8rem;color:rgba(245,242,236,.38);font-family:'DM Mono',monospace;font-style:italic;margin-top:-.2rem}
+.roast-section{display:flex;flex-direction:column;gap:.4rem}
+.roast-section-label{font-size:.63rem;font-family:'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:5px;margin-bottom:1px}
+.roast-section-label.red{color:rgba(255,90,60,.65)}
+.roast-section-label.amber{color:rgba(232,200,71,.6)}
+.roast-section-label.green{color:rgba(116,170,156,.65)}
+.roast-items{display:flex;flex-direction:column;gap:.35rem}
+.roast-item{font-size:.79rem;line-height:1.55;padding:.42rem .65rem;border-radius:7px;font-family:'DM Sans',sans-serif}
+.roast-item.flag{background:rgba(255,80,50,.06);border-left:2px solid rgba(255,80,50,.28);color:rgba(245,242,236,.62)}
+.roast-item.question{background:rgba(255,255,255,.04);border-left:2px solid rgba(255,255,255,.1);color:rgba(245,242,236,.6)}
+.roast-item.win{background:rgba(116,170,156,.08);border-left:2px solid rgba(116,170,156,.3);color:rgba(245,242,236,.75)}
+.roast-actions{display:flex;gap:.6rem;margin-top:.35rem}
+.fix-btn{flex:1;background:var(--accent);color:var(--black);border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:600;padding:.6rem;cursor:pointer;transition:opacity .15s}
+.fix-btn:hover{opacity:.88}
+.again-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:7px;color:rgba(245,242,236,.5);font-family:'DM Sans',sans-serif;font-size:.84rem;padding:.6rem 1rem;cursor:pointer;transition:all .15s;white-space:nowrap}
+.again-btn:hover{color:var(--white);border-color:rgba(255,255,255,.2)}
 
 /* FEATURES */
 .features{padding:6rem 2rem;max-width:1100px;margin:0 auto}
 .features-header{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:end;margin-bottom:3.5rem}
 .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
 .feature-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:1.5rem;transition:border-color .2s,transform .2s}
-.feature-card:hover{border-color:rgba(232,255,71,.2);transform:translateY(-3px)}
+.feature-card:hover{border-color:rgba(255,107,53,.2);transform:translateY(-3px)}
 .feature-card.big{grid-column:span 2;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:center}
 .feature-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:1rem}
+.icon-red{background:rgba(255,80,50,.12)}
+.icon-amber{background:rgba(232,200,71,.1)}
 .icon-green{background:rgba(37,211,102,.1)}
 .icon-blue{background:rgba(29,161,242,.1)}
 .icon-orange{background:rgba(255,107,53,.15)}
-.icon-yellow{background:rgba(232,255,71,.1)}
 .icon-purple{background:rgba(167,115,250,.1)}
 .feature-card h3{font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;margin-bottom:.5rem;color:var(--white)}
 .feature-card p{font-size:.83rem;color:rgba(245,242,236,.45);line-height:1.6;font-weight:300}
 .feature-visual{background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:10px;padding:1rem;display:flex;flex-direction:column;gap:.5rem}
-.convo-line{display:flex;gap:8px;align-items:flex-start}
-.convo-av{width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;font-family:'DM Sans',sans-serif}
-.convo-bubble{background:rgba(255,255,255,.06);border-radius:8px;padding:5px 8px;font-size:8px;color:rgba(245,242,236,.7);font-family:'DM Sans',sans-serif;line-height:1.4;max-width:85%}
-.convo-bubble.ai-bubble{background:rgba(116,170,156,.1);border-left:1.5px solid var(--ai);color:rgba(245,242,236,.8)}
+.fv-row{display:flex;flex-direction:column;gap:3px}
+.fv-label{font-size:.6rem;font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:rgba(245,242,236,.2)}
+.fv-item{background:rgba(255,80,50,.07);border-left:2px solid rgba(255,80,50,.3);border-radius:5px;padding:5px 8px;font-size:.76rem;color:rgba(245,242,236,.6);font-family:'DM Sans',sans-serif;line-height:1.4}
+.fv-item.ok{background:rgba(116,170,156,.07);border-left-color:rgba(116,170,156,.3);color:rgba(245,242,236,.7)}
+.fv-item.q{background:rgba(255,255,255,.04);border-left-color:rgba(255,255,255,.12)}
 
-/* PLATFORMS */
-.platforms{padding:4rem 2rem;max-width:1100px;margin:0 auto}
-.platform-logos{display:grid;grid-template-columns:repeat(6,1fr);gap:1rem;margin-top:2.5rem}
-.platform-logo-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:1.25rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;transition:all .2s}
-.platform-logo-card:hover{border-color:rgba(255,255,255,.15);transform:translateY(-2px)}
-.plat-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px}
-.plat-name{font-size:.7rem;color:rgba(245,242,236,.35);font-family:'DM Mono',monospace;text-align:center}
-.more-plats{background:var(--card-bg);border:1px dashed rgba(255,255,255,.1);border-radius:12px;padding:1.25rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;color:rgba(245,242,236,.2);font-size:.7rem;font-family:'DM Mono',monospace}
+/* COVERAGE */
+.coverage{padding:4rem 2rem;max-width:1100px;margin:0 auto}
+.coverage-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2.5rem}
+.coverage-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.1rem 1rem;transition:all .2s;cursor:default}
+.coverage-card:hover{border-color:rgba(255,107,53,.22);transform:translateY(-2px)}
+.coverage-num{font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(245,242,236,.18);letter-spacing:.08em;margin-bottom:.45rem}
+.coverage-name{font-size:.9rem;font-weight:600;color:var(--white);margin-bottom:.2rem}
+.coverage-desc{font-size:.74rem;color:rgba(245,242,236,.32);line-height:1.5;font-weight:300}
 
 /* PRICING */
 .pricing{padding:6rem 2rem;max-width:900px;margin:0 auto;text-align:center}
 .pricing-cards{display:grid;grid-template-columns:1fr 1.05fr 1fr;gap:1rem;margin-top:3rem;text-align:left}
 .price-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:1.75rem 1.5rem}
-.price-card.featured{border-color:rgba(232,255,71,.3);background:rgba(232,255,71,.03);position:relative}
-.popular-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--black);font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.3rem 1rem;border-radius:0 0 8px 8px;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.price-card.featured{border-color:rgba(255,107,53,.3);background:rgba(255,107,53,.02);position:relative}
+.popular-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--accent2);color:#fff;font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.3rem 1rem;border-radius:0 0 8px 8px;font-family:'DM Sans',sans-serif;white-space:nowrap}
 .plan-name{font-size:.75rem;color:rgba(245,242,236,.35);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem}
 .price-amount{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--white);line-height:1;margin-bottom:.25rem}
 .price-amount span{font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:300;color:rgba(245,242,236,.4)}
 .price-sub{font-size:.78rem;color:rgba(245,242,236,.3);margin-bottom:1.5rem}
 .price-features{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.75rem}
 .price-features li{font-size:.82rem;color:rgba(245,242,236,.55);display:flex;align-items:flex-start;gap:8px;line-height:1.4}
-.price-features li::before{content:'✓';color:var(--accent);font-weight:700;flex-shrink:0;font-size:.78rem;margin-top:1px}
+.price-features li::before{content:'✓';color:var(--accent2);font-weight:700;flex-shrink:0;font-size:.78rem;margin-top:1px}
 .price-features li.disabled{opacity:.3}
 .price-features li.disabled::before{content:'×';color:rgba(245,242,236,.3)}
 .plan-btn{width:100%;padding:.7rem;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(245,242,236,.7);transition:all .15s}
 .plan-btn:hover{background:rgba(255,255,255,.05);color:var(--white)}
-.plan-btn.featured-btn{background:var(--accent);border-color:transparent;color:var(--black);font-weight:600}
+.plan-btn.featured-btn{background:var(--accent2);border-color:transparent;color:#fff;font-weight:600}
 .plan-btn.featured-btn:hover{opacity:.88}
 
 /* CREATOR */
 .creator{padding:6rem 2rem;max-width:1100px;margin:0 auto}
 .creator-inner{display:grid;grid-template-columns:1fr 1.8fr;gap:4rem;align-items:center;background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:3rem}
 .creator-avatar-wrap{display:flex;flex-direction:column;align-items:center;gap:1.5rem}
-.creator-avatar{width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,rgba(232,255,71,.12) 0%,rgba(116,170,156,.18) 100%);border:2px solid rgba(232,255,71,.2);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--accent)}
+.creator-avatar{width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,rgba(255,107,53,.12) 0%,rgba(232,255,71,.12) 100%);border:2px solid rgba(255,107,53,.2);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--accent2)}
 .creator-socials{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
 .social-pill{padding:.3rem .85rem;border:1px solid var(--border);border-radius:100px;font-size:.72rem;color:rgba(245,242,236,.4);font-family:'DM Mono',monospace;text-decoration:none;transition:all .15s}
-.social-pill:hover{border-color:rgba(232,255,71,.3);color:var(--accent)}
+.social-pill:hover{border-color:rgba(255,107,53,.3);color:var(--accent2)}
 .creator-tag{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--accent2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
 .creator-name{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;line-height:1;margin-bottom:.3rem}
 .creator-designation{font-size:.85rem;color:var(--ai);font-family:'DM Mono',monospace;margin-bottom:1.25rem}
 .creator-bio{font-size:.88rem;color:rgba(245,242,236,.5);line-height:1.78;font-weight:300}
 .creator-stats{display:flex;gap:2rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);flex-wrap:wrap}
 .stat-item{display:flex;flex-direction:column;gap:3px}
-.stat-num{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--accent);line-height:1}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--accent2);line-height:1}
 .stat-label{font-size:.72rem;color:rgba(245,242,236,.3);font-family:'DM Mono',monospace}
 
 /* CONTACT */
@@ -253,7 +225,7 @@ input::placeholder{color:rgba(245,242,236,.2)}
 
 /* CTA */
 .cta-section{padding:7rem 2rem;text-align:center;position:relative;overflow:hidden}
-.cta-bg{position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 50% 50%,rgba(232,255,71,.05) 0%,transparent 70%)}
+.cta-bg{position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 50% 50%,rgba(255,107,53,.05) 0%,transparent 70%)}
 .cta-content{position:relative;z-index:1}
 .cta-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,6vw,5.5rem);line-height:.95;margin-bottom:1rem}
 .cta-sub{font-size:1rem;color:rgba(245,242,236,.5);font-weight:300;margin-bottom:2rem}
@@ -289,12 +261,13 @@ footer{background:#0D1117;border-top:1px solid rgba(255,255,255,.06);padding:3.5
   .nav-links{display:none}
   .hamburger{display:flex}
   .mobile-cta{display:inline-block;font-size:.8rem;padding:.45rem 1rem}
-  .builder-body{grid-template-columns:1fr}
-  .builder-input{border-right:none;border-bottom:1px solid var(--border)}
+  .roast-builder{grid-template-columns:1fr}
+  .roast-input{border-right:none;border-bottom:1px solid var(--border)}
+  .roast-output{min-height:380px}
   .features-header{grid-template-columns:1fr;gap:1rem}
   .features-grid{grid-template-columns:1fr 1fr}
   .feature-card.big{grid-column:span 2;grid-template-columns:1fr}
-  .platform-logos{grid-template-columns:repeat(3,1fr)}
+  .coverage-grid{grid-template-columns:repeat(2,1fr)}
   .pricing-cards{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto}
   .creator-inner{grid-template-columns:1fr;gap:2rem;text-align:center;padding:2rem}
   .creator-avatar-wrap{width:100%}
@@ -307,16 +280,15 @@ footer{background:#0D1117;border-top:1px solid rgba(255,255,255,.06);padding:3.5
   .hero{padding:6rem 1.25rem 3rem}
   h1{font-size:clamp(2.8rem,12vw,4rem)}
   .hero-sub{font-size:.95rem}
-  .demo,.features,.platforms,.pricing,.creator,.contact{padding:3.5rem 1.25rem}
+  .demo,.features,.coverage,.pricing,.creator,.contact{padding:3.5rem 1.25rem}
   .features-grid{grid-template-columns:1fr}
   .feature-card.big{grid-column:span 1;grid-template-columns:1fr}
-  .platform-logos{grid-template-columns:repeat(2,1fr)}
+  .coverage-grid{grid-template-columns:repeat(2,1fr)}
   .footer-grid{grid-template-columns:1fr;gap:1.75rem}
   footer{padding:2.5rem 1.25rem 0}
   .modal-box{padding:1.75rem 1.25rem}
-  .builder-toolbar{gap:.75rem}
-  .platform-tabs{gap:.2rem}
-  .ptab{padding:.3rem .55rem;font-size:.72rem}
+  .sector-tabs{gap:.25rem}
+  .stab{padding:.28rem .55rem;font-size:.72rem}
 }
 </style>
 </head>
@@ -371,22 +343,22 @@ footer{background:#0D1117;border-top:1px solid rgba(255,255,255,.06);padding:3.5
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <div class="hero-badge">AI-powered mockup engine</div>
-    <h1>Stop faking.<em>Start Dropping.</em></h1>
-    <p class="hero-sub">Generate hyper-realistic social & chat mockups in seconds. Let AI write the conversations — you take the credit.</p>
+    <div class="hero-badge">AI-Powered VC Session</div>
+    <h1>Roast your pitch.<em>Fund your dream.</em></h1>
+    <p class="hero-sub">MockDrop's AI plays a skeptical VC — tears your deck apart, asks the questions you'll face in the room, then helps you rebuild a pitch that actually gets funded.</p>
     <div class="hero-actions">
-      <a href="https://www.producthunt.com" target="_blank" rel="noopener" class="btn-primary">View on Product Hunt →</a>
+      <button class="btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Roast My Pitch →</button>
       <a href="#about" class="btn-ghost">About Us</a>
     </div>
-    <div class="platform-pills">
-      <div class="pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>WhatsApp</div>
-      <div class="pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="#e2e8f0"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L2.08 2.25h6.826l4.158 5.483zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>Twitter / X</div>
-      <div class="pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="#E1306C"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>Instagram</div>
-      <div class="pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="#74AA9C"><path d="M22.282 9.821a5.985 5.985 0 00-.516-4.91 6.046 6.046 0 00-6.51-2.9A6.065 6.065 0 004.981 4.18a5.985 5.985 0 00-3.998 2.9 6.046 6.046 0 00.743 7.097 5.98 5.98 0 00.51 4.911 6.051 6.051 0 006.515 2.9A5.985 5.985 0 0013.26 24a6.056 6.056 0 005.772-4.206 5.99 5.99 0 003.997-2.9 6.056 6.056 0 00-.747-7.073zM13.26 22.43a4.476 4.476 0 01-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 00.392-.681v-6.737l2.02 1.168a.071.071 0 01.038.052v5.583a4.504 4.504 0 01-4.494 4.494zM3.6 18.304a4.47 4.47 0 01-.535-3.014l.142.085 4.783 2.759a.771.771 0 00.78 0l5.843-3.369v2.332a.08.08 0 01-.032.067L9.73 19.95a4.5 4.5 0 01-6.13-1.646zM2.34 7.896a4.485 4.485 0 012.366-1.973V11.6a.766.766 0 00.388.676l5.815 3.355-2.02 1.168a.076.076 0 01-.071 0l-4.83-2.786A4.504 4.504 0 012.34 7.872zm16.597 3.855l-5.843-3.371 2.019-1.168a.076.076 0 01.072 0l4.83 2.791a4.494 4.494 0 01-.676 8.105v-5.678a.79.79 0 00-.402-.679zm2.01-3.023l-.141-.085-4.774-2.782a.776.776 0 00-.785 0L9.409 9.23V6.897a.066.066 0 01.028-.061l4.83-2.787a4.5 4.5 0 016.68 4.66zm-12.64 4.135l-2.02-1.164a.08.08 0 01-.038-.057V6.075a4.5 4.5 0 017.375-3.453l-.142.08L8.704 5.46a.795.795 0 00-.393.681zm1.097-2.365l2.602-1.5 2.607 1.5v2.999l-2.597 1.5-2.607-1.5z"/></svg>ChatGPT</div>
-      <div class="pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="#7C3AED"><path d="M12 2C12 7.523 7.523 12 2 12C7.523 12 12 16.477 12 22C12 16.477 16.477 12 22 12C16.477 12 12 7.523 12 2Z"/></svg>Gemini</div>
-      <div class="pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</div>
+    <div class="stage-pills">
+      <div class="pill"><span class="pill-dot" style="background:#E8FF47"></span>Pre-Seed</div>
+      <div class="pill"><span class="pill-dot" style="background:#74AA9C"></span>Seed Stage</div>
+      <div class="pill"><span class="pill-dot" style="background:#FF6B35"></span>YC Application</div>
+      <div class="pill"><span class="pill-dot" style="background:#A773FA"></span>Demo Day</div>
+      <div class="pill"><span class="pill-dot" style="background:#1DA1F2"></span>Series A</div>
+      <div class="pill"><span class="pill-dot" style="background:#FF4500"></span>Product Hunt</div>
     </div>
-
+    <p class="platforms-note">Works for any stage — from napkin idea to Series A deck</p>
   </div>
 </section>
 
@@ -395,65 +367,84 @@ footer{background:#0D1117;border-top:1px solid rgba(255,255,255,.06);padding:3.5
   <div class="section-label">Live Demo</div>
   <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem">
     <div>
-      <div class="section-title">Build your mockup,<br>right here.</div>
-      <div class="section-sub">No sign-up. Just type — or let AI write it for you.</div>
+      <div class="section-title">Drop your pitch.<br>Face the fire.</div>
+      <div class="section-sub" style="margin-bottom:0">Describe your startup and our AI plays the skeptical VC in the room.</div>
     </div>
-    <div class="ai-generating" id="ai-status"><div class="dots"><span></span><span></span><span></span></div>AI is writing your conversation...</div>
   </div>
-  <div class="demo-builder">
-    <div class="builder-toolbar">
-      <span class="toolbar-label">Platform</span>
-      <div class="platform-tabs">
-        <button class="ptab active" onclick="switchPlatform('wa',this)">WhatsApp</button>
-        <button class="ptab" onclick="switchPlatform('tw',this)">Twitter / X</button>
-        <button class="ptab" onclick="switchPlatform('ai',this)">ChatGPT</button>
+  <div class="roast-builder">
+    <!-- INPUT SIDE -->
+    <div class="roast-input">
+      <div>
+        <div class="input-label" style="margin-bottom:8px">Your sector</div>
+        <div class="sector-tabs">
+          <button class="stab active" onclick="switchSector('saas',this)">SaaS</button>
+          <button class="stab" onclick="switchSector('marketplace',this)">Marketplace</button>
+          <button class="stab" onclick="switchSector('consumer',this)">Consumer</button>
+          <button class="stab" onclick="switchSector('deeptech',this)">Deep Tech</button>
+          <button class="stab" onclick="switchSector('fintech',this)">FinTech</button>
+          <button class="stab" onclick="switchSector('social',this)">Social</button>
+        </div>
       </div>
-      <div class="mode-toggle">
-        <button class="mtab active" onclick="switchMode('dark',this)">Dark</button>
-        <button class="mtab" onclick="switchMode('light',this)">Light</button>
+      <div>
+        <div class="input-label" style="margin-bottom:8px">Describe your startup</div>
+        <textarea class="pitch-textarea" id="pitch-input" placeholder="e.g. AI-powered HR tool that automates performance reviews for mid-market companies. We have 3 pilot customers and $15K ARR. Looking to raise $750K pre-seed..."></textarea>
       </div>
+      <div>
+        <div class="examples-label">Try an example</div>
+        <div class="example-prompts">
+          <button class="example-prompt" onclick="tryExample('AI-powered compliance tool for fintech startups. Reduces regulatory overhead by 70%. 2 design partners, pre-revenue. Raising $500K to hire a compliance lead and close first 5 paid customers.')">→ AI compliance tool for fintech, pre-revenue, raising $500K</button>
+          <button class="example-prompt" onclick="tryExample('Two-sided marketplace for freelance architects. Architects list projects, homeowners browse and book. 12% take rate. Currently 80 architects, 200 homeowners in beta. $8K GMV last month.')">→ Freelance architect marketplace, 12% take rate, $8K GMV</button>
+          <button class="example-prompt" onclick="tryExample('Consumer app for tracking daily habits with AI coaching. 4K downloads in 3 weeks, 1.5K DAU, D7 retention 38%. Freemium with $7.99/mo premium. No paid marketing.')">→ AI habit tracker, 4K downloads, 38% D7 retention</button>
+        </div>
+      </div>
+      <button class="roast-btn" onclick="roastPitch()"><span class="flame-icon">🔥</span>Roast My Pitch</button>
     </div>
-    <div class="builder-body">
-      <div class="builder-input">
-        <div>
-          <div class="input-label" style="margin-bottom:8px">Participants</div>
-          <div class="participants-row">
-            <div class="field-group"><span style="font-size:.7rem;color:rgba(245,242,236,.25);font-family:'DM Mono',monospace">You</span><input type="text" id="name-you" placeholder="Your name" value="Alex"></div>
-            <div class="field-group"><span style="font-size:.7rem;color:rgba(245,242,236,.25);font-family:'DM Mono',monospace">Them</span><input type="text" id="name-them" placeholder="Their name" value="Jordan"></div>
-          </div>
-        </div>
-        <div class="input-label">Messages</div>
-        <div class="messages-area" id="msg-area">
-          <div class="msg-row"><span class="msg-side-label">Them</span><div class="msg-input-wrap"><input type="text" placeholder="Message..." value="Hey! Did you see the new MockDrop launch? 🔥" data-side="received"></div></div>
-          <div class="msg-row"><span class="msg-side-label">You</span><div class="msg-input-wrap"><input type="text" placeholder="Message..." value="Just saw it — looks insane. Watermark-free too!" data-side="sent"></div></div>
-          <div class="msg-row"><span class="msg-side-label">Them</span><div class="msg-input-wrap"><input type="text" placeholder="Message..." value="We need this for our marketing assets fr 😭" data-side="received"></div></div>
-        </div>
-        <button class="add-msg-btn" onclick="addMessage()">+ Add message</button>
-        <button class="ai-gen-btn" onclick="generateWithAI()"><span class="ai-icon">✦</span>Generate conversation with AI</button>
-        <button class="gen-preview-btn" onclick="renderPreview()">↓ Update Preview</button>
+
+    <!-- OUTPUT SIDE -->
+    <div class="roast-output">
+      <!-- PLACEHOLDER -->
+      <div id="roast-placeholder" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:.85rem;text-align:center;padding:2rem">
+        <div class="placeholder-ring">🔥</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:rgba(245,242,236,.15);line-height:1;margin-top:.25rem">VC is waiting</div>
+        <div style="font-size:.74rem;color:rgba(245,242,236,.18);font-family:'DM Mono',monospace;line-height:1.55;max-width:200px">Describe your startup on the left and click Roast →</div>
       </div>
-      <div class="builder-preview">
-        <div class="preview-header">
-          <span class="preview-label">Live Preview</span>
-          <button class="download-btn" onclick="openModal('Export PNG','Download your mockup','Sign up free to export full-resolution PNG files — zero watermarks, always.')">↓ Export PNG</button>
+      <!-- GENERATING -->
+      <div class="roast-generating" id="roast-generating">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div class="vc-thinking">VC is reviewing your deck...</div>
+        <div style="font-size:.68rem;color:rgba(245,242,236,.2);font-family:'DM Mono',monospace;margin-top:-.25rem">Preparing brutal feedback</div>
+      </div>
+      <!-- ROAST CARD -->
+      <div class="roast-card" id="roast-card">
+        <div class="vc-session-header">
+          <span class="vc-label">Mock VC Session</span>
+          <span class="vc-badge" id="vc-sector-badge">SaaS</span>
         </div>
-        <div class="phone-frame" id="phone-frame">
-          <div id="preview-wa">
-            <div class="chat-status-bar"><span class="time">9:41</span><span style="font-size:9px;color:rgba(255,255,255,.5)">●●●</span></div>
-            <div class="wa-header"><div class="wa-avatar" id="wa-av">J</div><div><div class="wa-name" id="wa-name">Jordan</div><div class="wa-status">online</div></div></div>
-            <div class="wa-body dark" id="wa-body"></div>
-            <div class="wa-input-row"><div class="wa-msg-box"></div></div>
+        <div>
+          <div style="font-size:.65rem;font-family:'DM Mono',monospace;color:rgba(245,242,236,.25);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem">Fundability Score</div>
+          <div class="score-block">
+            <div class="score-bar-wrap">
+              <div class="score-bar-track"><div class="score-bar-fill" id="roast-score-fill" style="width:40%"></div></div>
+            </div>
+            <div class="score-num" id="roast-score-num">4/10</div>
           </div>
-          <div id="preview-tw" style="display:none">
-            <div class="chat-status-bar"><span class="time">9:41</span></div>
-            <div class="tw-header"><span class="tw-back">←</span><div><div class="tw-header-name" id="tw-hname">Jordan</div><div class="tw-header-handle" id="tw-hhandle">@jordan</div></div></div>
-            <div class="tw-body dark" id="tw-body"></div>
-          </div>
-          <div id="preview-ai" style="display:none">
-            <div class="chat-status-bar"><span class="time">9:41</span></div>
-            <div class="ai-header" id="ai-header"><div class="ai-logo">✦</div><div class="ai-title">ChatGPT</div></div>
-            <div class="ai-body dark" id="ai-body"></div>
-          </div>
+          <div class="verdict-text" id="roast-verdict">"Interesting idea. Terrible deck."</div>
+        </div>
+        <div class="roast-section">
+          <div class="roast-section-label red">⬡ Red Flags</div>
+          <div class="roast-items" id="roast-flags"></div>
+        </div>
+        <div class="roast-section">
+          <div class="roast-section-label amber">→ Hard Questions</div>
+          <div class="roast-items" id="roast-questions"></div>
+        </div>
+        <div class="roast-section">
+          <div class="roast-section-label green">✓ What's Working</div>
+          <div class="roast-items" id="roast-win"></div>
+        </div>
+        <div class="roast-actions">
+          <button class="fix-btn" onclick="openModal('Fix My Deck','Rebuild with MockDrop','Tell us your details and we\'ll help you turn this roast into a fundable deck.')">Fix My Deck →</button>
+          <button class="again-btn" onclick="roastPitch()">Roast Again</button>
         </div>
       </div>
     </div>
@@ -463,72 +454,102 @@ footer{background:#0D1117;border-top:1px solid rgba(255,255,255,.06);padding:3.5
 <!-- FEATURES -->
 <section class="features" id="features">
   <div class="features-header">
-    <div><div class="section-label">Why MockDrop</div><div class="section-title">Built different.<br>Designed to ship.</div></div>
-    <p style="font-size:.95rem;color:rgba(245,242,236,.4);line-height:1.7;font-weight:300">We didn't just build another screenshot tool. MockDrop is an end-to-end mockup engine with AI at the core — built for founders, marketers, and creators who move fast.</p>
+    <div><div class="section-label">Why MockDrop</div><div class="section-title">Built to survive<br>the partner meeting.</div></div>
+    <p style="font-size:.95rem;color:rgba(245,242,236,.4);line-height:1.7;font-weight:300">We didn't build another "deck score" tool. MockDrop is a full pre-fundraise rehearsal engine — AI at the core, brutal honesty by design, built for founders who need real feedback before the room eats them alive.</p>
   </div>
   <div class="features-grid">
     <div class="feature-card big">
       <div>
-        <div class="feature-icon icon-green">✦</div>
-        <h3>AI Conversation Writer</h3>
-        <p>Describe the scene — "excited customer after buying our product" — and our AI generates a full, realistic, platform-native conversation in seconds.</p>
+        <div class="feature-icon icon-red">🔥</div>
+        <h3>Brutal VC Feedback</h3>
+        <p>No participation trophies. MockDrop's AI is trained on real VC feedback patterns — vague markets, weak moats, misaligned team slides. It finds what a partner meeting would find, before you're in it.</p>
         <div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
-          <span style="background:rgba(116,170,156,.12);border:1px solid rgba(116,170,156,.2);border-radius:100px;padding:.2rem .65rem;font-size:.72rem;color:var(--ai);font-family:'DM Mono',monospace">Powered by Claude</span>
-          <span style="background:rgba(232,255,71,.08);border:1px solid rgba(232,255,71,.15);border-radius:100px;padding:.2rem .65rem;font-size:.72rem;color:var(--accent);font-family:'DM Mono',monospace">Any platform</span>
+          <span style="background:rgba(116,170,156,.12);border:1px solid rgba(116,170,156,.2);border-radius:100px;padding:.2rem .65rem;font-size:.72rem;color:var(--ai);font-family:'DM Mono',monospace">Sector-calibrated</span>
+          <span style="background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.18);border-radius:100px;padding:.2rem .65rem;font-size:.72rem;color:var(--accent2);font-family:'DM Mono',monospace">Zero sugarcoating</span>
         </div>
       </div>
       <div class="feature-visual">
-        <div class="convo-line"><div class="convo-av" style="background:#25D366">S</div><div class="convo-bubble">This product literally changed how I work 🙌</div></div>
-        <div class="convo-line" style="justify-content:flex-end"><div class="convo-bubble">Glad it's working! Which feature helped most?</div><div class="convo-av" style="background:#1DA1F2">M</div></div>
-        <div class="convo-line"><div class="convo-av" style="background:#25D366">S</div><div class="convo-bubble">The AI auto-fill is unreal. Saves me an hour every session.</div></div>
-        <div style="border-top:1px solid rgba(255,255,255,.05);margin-top:6px;padding-top:6px"><div class="convo-bubble ai-bubble" style="max-width:100%">✦ AI generated 3 messages in 1.2s</div></div>
+        <div class="fv-row"><div class="fv-label">Red Flags</div>
+          <div class="fv-item">TAM math is aspirational — "all software companies" is not a market.</div>
+          <div class="fv-item">No moat explained. Why can't a well-funded competitor ship this in 90 days?</div>
+        </div>
+        <div class="fv-row" style="margin-top:4px"><div class="fv-label">What's Working</div>
+          <div class="fv-item ok">Strong domain expertise on the founding team — that's genuinely differentiated.</div>
+        </div>
       </div>
     </div>
-    <div class="feature-card"><div class="feature-icon icon-blue">⬡</div><h3>Pixel-Perfect Realism</h3><p>Every platform rendered to spec — correct fonts, bubble shapes, status bars, and timestamps. Passes the screenshot test every time.</p></div>
-    <div class="feature-card"><div class="feature-icon icon-orange">◐</div><h3>Real-time Dark / Light</h3><p>Toggle modes instantly and see both versions live. Export either or both for your marketing assets.</p></div>
-    <div class="feature-card"><div class="feature-icon icon-yellow">◈</div><h3>Zero Watermarks, Ever</h3><p>On every plan, including free. Your marketing assets shouldn't advertise someone else's tool.</p></div>
-    <div class="feature-card"><div class="feature-icon icon-purple">⬡</div><h3>Cloud Save & Share</h3><p>Projects auto-save to the cloud. Share a live link or export high-res PNG / SVG in one click.</p></div>
+    <div class="feature-card"><div class="feature-icon icon-amber">?</div><h3>Hard Question Bank</h3><p>The exact questions you'll face in the room. NRR, CAC payback, defensibility, why now — practice your answers before they catch you off guard.</p></div>
+    <div class="feature-card"><div class="feature-icon icon-green">↺</div><h3>Rebuild Mode</h3><p>After the roast, MockDrop walks you through the fixes. Better narrative structure. Tighter market framing. A deck that answers questions before they're asked.</p></div>
+    <div class="feature-card"><div class="feature-icon icon-blue">⬡</div><h3>Slide-by-Slide Analysis</h3><p>Describe your deck slide by slide and get roasted on each one. Problem, Market, Business Model, Traction — nothing gets a pass.</p></div>
+    <div class="feature-card"><div class="feature-icon icon-purple">◈</div><h3>Sector Intelligence</h3><p>Generic feedback is useless. MockDrop's AI knows SaaS metrics from marketplace metrics from deep tech timelines — the roast is calibrated to your space.</p></div>
   </div>
 </section>
 
-
+<!-- COVERAGE -->
+<section class="coverage">
+  <div class="section-label">Coverage</div>
+  <div class="section-title">Every slide. No exceptions.</div>
+  <p class="section-sub">From your problem statement to your financial model — MockDrop flags what VCs notice in the first 60 seconds.</p>
+  <div class="coverage-grid">
+    <div class="coverage-card"><div class="coverage-num">01</div><div class="coverage-name">Problem Slide</div><div class="coverage-desc">Is the pain real, urgent, and underserved — or is this a vitamin, not a painkiller?</div></div>
+    <div class="coverage-card"><div class="coverage-num">02</div><div class="coverage-name">Market Opportunity</div><div class="coverage-desc">TAM/SAM/SOM — is the sizing bottom-up or just "1% of a trillion dollar market"?</div></div>
+    <div class="coverage-card"><div class="coverage-num">03</div><div class="coverage-name">Solution & Product</div><div class="coverage-desc">Does the solution actually match the problem, and is there a demo or prototype?</div></div>
+    <div class="coverage-card"><div class="coverage-num">04</div><div class="coverage-name">Business Model</div><div class="coverage-desc">How do you make money? What's the unit economics story — CAC, LTV, payback?</div></div>
+    <div class="coverage-card"><div class="coverage-num">05</div><div class="coverage-name">Competitive Landscape</div><div class="coverage-desc">Is your moat real and defensible — or a feature checklist that any funded team can copy?</div></div>
+    <div class="coverage-card"><div class="coverage-num">06</div><div class="coverage-name">Traction & Metrics</div><div class="coverage-desc">Revenue, retention, growth rate — are the numbers honest or cherry-picked?</div></div>
+    <div class="coverage-card"><div class="coverage-num">07</div><div class="coverage-name">Team Slide</div><div class="coverage-desc">Why does this team have the right to build this — background, domain, conviction?</div></div>
+    <div class="coverage-card"><div class="coverage-num">08</div><div class="coverage-name">Ask & Use of Funds</div><div class="coverage-desc">Is the raise size calibrated to milestones — or just a round number with no logic?</div></div>
+  </div>
+</section>
 
 <!-- PRICING -->
 <section class="pricing" id="pricing">
   <div class="section-label" style="text-align:center;margin-bottom:.5rem">Pricing</div>
   <div class="section-title">Simple. Honest. No tricks.</div>
-  <p class="section-sub" style="max-width:400px;margin:0 auto">No credit card required to start. Upgrade when you need more.</p>
+  <p class="section-sub" style="max-width:400px;margin:0 auto">No credit card required to start. Upgrade when you need more firepower.</p>
   <div class="pricing-cards">
     <div class="price-card">
-      <div class="plan-name">Free</div>
+      <div class="plan-name">Roast</div>
       <div class="price-amount">$0 <span>/ mo</span></div>
       <div class="price-sub">Forever free</div>
       <ul class="price-features">
-        <li>10 exports per month</li><li>5 platforms</li><li>Dark & light modes</li>
-        <li class="disabled">AI conversation writer</li><li class="disabled">Cloud save</li><li class="disabled">Custom branding</li>
+        <li>5 roasts per month</li>
+        <li>SaaS, Consumer & Marketplace</li>
+        <li>AI verdict + red flags</li>
+        <li class="disabled">Hard question bank</li>
+        <li class="disabled">Rebuild mode</li>
+        <li class="disabled">All 6 sectors</li>
       </ul>
-      <button class="plan-btn" onclick="openModal('Free Plan','Start for free today','Tell us about yourself and we\'ll set up your free MockDrop account right away.')">Get Started</button>
+      <button class="plan-btn" onclick="openModal('Free Plan','Start roasting for free','Tell us about yourself and we\'ll set up your free MockDrop account right away.')">Get Started</button>
     </div>
     <div class="price-card featured">
       <div class="popular-badge">Most Popular</div>
-      <div class="plan-name">Pro</div>
-      <div class="price-amount">$12 <span>/ mo</span></div>
+      <div class="plan-name">Raise</div>
+      <div class="price-amount">$19 <span>/ mo</span></div>
       <div class="price-sub">Billed monthly</div>
       <ul class="price-features">
-        <li>Unlimited exports</li><li>All 35+ platforms</li><li>Dark & light modes</li>
-        <li>AI conversation writer</li><li>Cloud save & share links</li><li class="disabled">Custom branding</li>
+        <li>Unlimited roasts</li>
+        <li>All 6 sectors</li>
+        <li>AI verdict + red flags</li>
+        <li>Hard question bank</li>
+        <li>Rebuild mode</li>
+        <li class="disabled">Investor scorecard PDF</li>
       </ul>
-      <button class="plan-btn featured-btn" onclick="openModal('Pro Plan','Start your free trial','Fill in your details and we\'ll get your Pro account ready — no card needed for the trial.')">Start Free Trial</button>
+      <button class="plan-btn featured-btn" onclick="openModal('Raise Plan','Start your free trial','Fill in your details and we\'ll get your Raise account ready — no card needed for the trial.')">Start Free Trial</button>
     </div>
     <div class="price-card">
-      <div class="plan-name">Team</div>
-      <div class="price-amount">$29 <span>/ mo</span></div>
-      <div class="price-sub">Up to 5 members</div>
+      <div class="plan-name">Fund</div>
+      <div class="price-amount">$49 <span>/ mo</span></div>
+      <div class="price-sub">For serious fundraisers</div>
       <ul class="price-features">
-        <li>Everything in Pro</li><li>Custom branding & logos</li><li>Brand kit (colors, fonts)</li>
-        <li>Priority support</li><li>API access</li><li>Bulk export</li>
+        <li>Everything in Raise</li>
+        <li>Investor-ready scorecard PDF</li>
+        <li>Slide-by-slide deep analysis</li>
+        <li>Pitch coaching sessions</li>
+        <li>Priority support</li>
+        <li>API access</li>
       </ul>
-      <button class="plan-btn" onclick="openModal('Team Plan','Team plan enquiry','Tell us about your team size and use case, and we\'ll prepare a custom onboarding for you.')">Get Team Access</button>
+      <button class="plan-btn" onclick="openModal('Fund Plan','Fund plan enquiry','Tell us about your raise size and timeline, and we\'ll prepare a custom onboarding for you.')">Get Fund Access</button>
     </div>
   </div>
 </section>
@@ -550,12 +571,12 @@ footer{background:#0D1117;border-top:1px solid rgba(255,255,255,.06);padding:3.5
       <div class="creator-tag">Founder & CEO</div>
       <div class="creator-name">Aryan Mehta</div>
       <div class="creator-designation">Product Designer turned Full-Stack Maker</div>
-      <p class="creator-bio">Aryan spent four years building marketing assets for early-stage SaaS companies, and every single time, he found himself wrestling with Photoshop for hours just to produce a simple, convincing WhatsApp screenshot. The process was slow, painful, and utterly unnecessary — so he decided to build the tool he always wished existed.</p>
-      <p class="creator-bio" style="margin-top:.9rem">MockDrop was born in a single weekend hackathon and shipped to Product Hunt six weeks later. What started as a personal itch has since grown into the go-to mockup engine for over 2,000 creators, marketers, and founders across 40+ countries. Aryan believes that great marketing shouldn't require a design degree — that AI should handle the busywork so teams can focus on telling better stories. He's deeply committed to keeping MockDrop honest: no dark patterns, no hidden fees, and no watermarks on the free plan, ever. When he's not shipping features, you'll find him experimenting with generative design, hiking somewhere with no WiFi, or mentoring fellow indie hackers on their first Product Hunt launch.</p>
+      <p class="creator-bio">Aryan spent four years watching founders pitch the same avoidable mistakes over and over — vague market sizing pulled from thin air, moats that weren't defensible, team slides that buried the strongest credential on slide 14. He built MockDrop after his own first startup got torn apart in a partner meeting for reasons he could have fixed if someone had just told him beforehand.</p>
+      <p class="creator-bio" style="margin-top:.9rem">MockDrop was born in a single weekend and shipped six weeks later. What started as a tool for founders in Aryan's network has grown into the go-to pitch preparation platform for 2,000+ founders across 40+ countries. He believes that fundraising is a skill, not a lottery — and that honest, specific feedback, delivered without ego, can fundamentally change outcomes for companies that deserve to exist. When he's not shipping features, you'll find him judging pitch competitions, mentoring pre-seed founders, or attempting to summit something without cell service.</p>
       <div class="creator-stats">
-        <div class="stat-item"><div class="stat-num">2K+</div><div class="stat-label">Users worldwide</div></div>
+        <div class="stat-item"><div class="stat-num">2K+</div><div class="stat-label">Founders helped</div></div>
         <div class="stat-item"><div class="stat-num">40+</div><div class="stat-label">Countries</div></div>
-        <div class="stat-item"><div class="stat-num">35+</div><div class="stat-label">Platforms</div></div>
+        <div class="stat-item"><div class="stat-num">500+</div><div class="stat-label">Red flags caught</div></div>
       </div>
     </div>
   </div>
@@ -594,9 +615,9 @@ footer{background:#0D1117;border-top:1px solid rgba(255,255,255,.06);padding:3.5
 <section class="cta-section">
   <div class="cta-bg"></div>
   <div class="cta-content">
-    <div class="cta-title">Your next mockup<br>is <em style="font-style:normal;color:var(--accent)">10 seconds away.</em></div>
-    <p class="cta-sub">No Photoshop. No watermarks. No excuses.</p>
-    <button class="btn-primary" style="font-size:1rem;padding:1rem 2.5rem;border:none" onclick="openModal('Get Started Free','Drop your first mock','Tell us about yourself and we\'ll have you generating mockups in minutes — free forever.')">Drop Your First Mock →</button>
+    <div class="cta-title">Your deck is one roast<br>away from <em style="font-style:normal;color:var(--accent)">fundable.</em></div>
+    <p class="cta-sub">Stop guessing what VCs think. Find out — before the meeting does.</p>
+    <button class="btn-primary" style="font-size:1rem;padding:1rem 2.5rem;border:none" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Roast My Pitch →</button>
   </div>
 </section>
 
@@ -608,7 +629,7 @@ footer{background:#0D1117;border-top:1px solid rgba(255,255,255,.06);padding:3.5
         <div class="footer-logo-icon">M</div>
         <div class="footer-logo-text">Mock<span>Drop</span></div>
       </div>
-      <p class="footer-tagline">Bridging the gap between ideas and viral marketing through hyper-realistic AI mockups.</p>
+      <p class="footer-tagline">Helping founders build fundable decks through brutal, honest AI pitch feedback.</p>
       <a href="#" class="footer-ph-btn">
         <div class="footer-ph-icon">P</div>
         <div class="footer-ph-text">
@@ -646,98 +667,107 @@ footer{background:#0D1117;border-top:1px solid rgba(255,255,255,.06);padding:3.5
 </footer>
 
 <script>
-const API = 'https://api.anthropic.com/v1/messages';
-let plat = 'wa', mode = 'dark';
+/* ---- ROAST DATA ---- */
+const roastData = {
+  saas: [
+    {score:4,verdict:"Interesting idea. Terrible deck.",flags:["TAM math is aspirational at best — 'all software companies' is not a market.","Competitor slide lists 5 names and checks every box. No VC believes that.","Pricing is value-based but you haven't explained the value."],questions:["What's your NRR at month 6? I want a number, not a range.","Why can't Salesforce add this as a feature next quarter?","You said 'enterprise-ready' — name one enterprise customer."],working:"The founding team's domain expertise is genuinely differentiated."},
+    {score:3,verdict:"Pass. Come back when you have 10 paying customers.",flags:["No proof points on the problem slide — it's all founder intuition.","Roadmap is features, not outcomes. VCs fund outcomes.","ARR projection hockey stick with no explanation of the inflection point."],questions:["What did your last three customer calls tell you that changed your thinking?","What's the one metric that would make you believe this is working?","How many people said no to this, and why?"],working:"The positioning against incumbents is clean and believable."},
+    {score:5,verdict:"Solid problem. Weak GTM.",flags:["You have a product, but the go-to-market is 'partnerships' — that's not a strategy.","Churn assumption of 2% monthly is too optimistic for SMB SaaS.","Demo shows features, not jobs-to-be-done."],questions:["What's your ICP? Give me a job title, company size, and the trigger event that makes them buy.","Who's the economic buyer vs. the user — same person?","What does your sales cycle look like today? Days or months?"],working:"Strong product intuition. The onboarding flow you described is genuinely thoughtful."}
+  ],
+  marketplace: [
+    {score:3,verdict:"Marketplace without supply is just a website.",flags:["You haven't solved the cold-start problem — 'launch in 3 cities' isn't a plan.","Take rate of 25% will kill supply-side retention in month 4.","Unit economics need a 3x improvement before this pencils out."],questions:["How do you acquire supply first without demand — or demand without supply?","What happens when a top supplier goes direct to your customers?","What's the LTV of both sides of this marketplace?"],working:"The niche is tight enough to actually win. That's rare."},
+    {score:5,verdict:"The mechanics work. Convince me on retention.",flags:["Demand-side CAC is 3x what's sustainable at your margin.","No lock-in mechanism — why can't buyers go direct after the first transaction?","Payment terms slide is missing. That's a yellow flag."],questions:["What's the frequency of repeat transactions on the demand side?","At what GMV does this become defensible?","What's your plan when Amazon enters this category?"],working:"Supply acquisition strategy is smart — the referral loop is real."},
+    {score:2,verdict:"This is Craigslist with a nicer font.",flags:["No proprietary advantage over incumbents. None.","Revenue model depends on take rate but you've shown no supplier willingness to pay.","Liquidity at launch is the entire risk and you haven't addressed it."],questions:["What does Airbnb, Thumbtack, or Taskrabbit do that you do better?","Why would a supplier leave an established platform to join yours?","What's the first 100 transactions plan, step by step?"],working:"You clearly understand the pain point from personal experience — that matters."}
+  ],
+  consumer: [
+    {score:4,verdict:"Nice app. Show me retention or we're done.",flags:["D30 retention isn't in the deck. That's the only number that matters.","CAC assumptions are social-only — that doesn't scale past $50K spend.","Engagement metrics are vanity — show me actions per session."],questions:["What's your D7 and D30 retention? Exact numbers.","What's the organic virality coefficient — is it above 1?","What makes a user come back on day 31 with no notification?"],working:"The core loop is intuitive — I understand why someone would open this daily."},
+    {score:3,verdict:"The idea is cute. The business isn't.",flags:["Monetization is ads. I don't fund ads businesses at pre-seed.","Downloads ≠ users. Where's the activation rate?","Competitor analysis is outdated — three of these shipped in the last 6 months."],questions:["How do you survive if Apple changes the algorithm tomorrow?","What's the LTV of a free user on an ad model at 1M MAU?","Who's your most retained user — describe them in detail."],working:"Brand voice is sharp. That's actually hard to build and you have it."},
+    {score:5,verdict:"Promising. The team slide is what has my attention.",flags:["Subscription price point hasn't been validated — '$9.99 is what we plan' is not a test.","Growth plan relies on influencer marketing which is unpredictable and unscalable.","No explanation of why this is a category, not a feature."],questions:["What's the dollar retention net of churn?","Which user behavior correlates most with long-term retention? You should know this.","What's the payback period on a paid install?"],working:"The founder-product fit here is exceptional — this solves your own problem in a way that shows."}
+  ],
+  deeptech: [
+    {score:4,verdict:"Impressive tech. I have zero idea how you sell it.",flags:["Time to first revenue is 4 years. That's a research grant, not a VC investment.","Go-to-market is 'pilot with large enterprise' — pilots don't pay the bills.","IP defensibility slide has no claim charts or freedom-to-operate analysis."],questions:["Who's the economic buyer and what's their budget cycle?","What's the regulatory path, and have you spoken to anyone who's navigated it?","Why does this team have the right to build this — not scientifically, commercially?"],working:"The scientific moat is real — I'd be surprised if anyone caught up in 5 years."},
+    {score:3,verdict:"I need to see pilot results before we talk again.",flags:["Technology readiness level isn't clear — are you TRL 4 or TRL 7?","Manufacturing scale-up costs are missing from the model entirely.","Defensibility depends on speed, not IP — and speed runs out."],questions:["What's your first commercial customer and what do they get for their money?","If this works perfectly, who does it threaten enough to try to acquire or kill you?","Walk me through the failure mode — what kills this company technically?"],working:"The problem statement is enormous and you've picked an elegant point of entry."},
+    {score:6,verdict:"One of the better deep tech decks I've seen — still missing commercial clarity.",flags:["The team has depth on science, thin on the commercial side.","Revenue model assumes $10M pilot contracts but hasn't closed a $100K one yet.","Market map shows everyone as a potential partner — that's not a strategy."],questions:["Who's your most likely first paying customer and what do you solve for them by Tuesday?","What does a strategic acquirer look like in 5 years and why would they buy vs. build?","What's your defensible position if the science becomes open-sourced?"],working:"The traction on the technical side — papers, patents, talent — is genuinely strong validation."}
+  ],
+  fintech: [
+    {score:4,verdict:"Unit economics need surgery. Interesting vertical though.",flags:["Interchange revenue at your scale doesn't cover CAC. You need a second revenue stream.","Regulatory risk section is one slide and completely hand-wavy.","Credit risk modeling assumptions are optimistic — show me stress test scenarios."],questions:["What's your banking-as-a-service partner and what are the terms?","How do you handle a 30% default rate in a downturn?","What's the path to a banking license and do you want one?"],working:"The compliance-first positioning is smart in this environment — regulators notice that."},
+    {score:2,verdict:"You need a banking partner, a compliance team, and 18 more months.",flags:["No banking partner named — this is the first thing a fintech VC checks.","Revenue projections assume 0% fraud losses. That's not how this works.","'Neobank' in 2026 needs a very different story than 2018."],questions:["Who's your sponsor bank and what's your tier 1 capital situation?","What's your fraud ML strategy and who built it?","Why will users trust you with their money over Chime, Cash App, or their existing bank?"],working:"The niche segment you've identified is underserved — that's the right starting point."},
+    {score:5,verdict:"The distribution strategy is interesting. The business model isn't baked.",flags:["GMV is impressive but monetization rate is unclear — what's the take and why?","No explanation of what prevents disintermediation as you scale.","Compliance roadmap isn't in the deck at all."],questions:["What's the net revenue per active user and how does it compound over 3 years?","What's your moat once a bank decides to build this internally?","At what scale does this reach profitability — what's the one lever that determines that?"],working:"Distribution through existing channels is the right insight — it's the hardest problem in fintech."}
+  ],
+  social: [
+    {score:3,verdict:"Every social app sounds good until you explain why users won't go back to Instagram.",flags:["No network effects model — social without lock-in is a feature waiting to be copied.","MAU numbers are from a beta with friends — that's not data.","Monetization is post-scale. How do you stay alive getting there?"],questions:["What's the one-sentence reason your most active user opened your app yesterday instead of TikTok?","At what user count does the network effect kick in — and what's the evidence for that number?","How do you survive a Facebook copycat with 3 billion in distribution?"],working:"Creator monetization model is genuinely novel — I haven't seen this angle before."},
+    {score:4,verdict:"The engagement numbers are real. The business model isn't.",flags:["Ad monetization requires scale you won't reach in 24 months at current growth.","Creator monetization cuts your margin at the exact moment you need to invest in growth.","Platform risk is massive — you're entirely dependent on app store distribution."],questions:["What's your content moderation plan and what does it cost at 10M users?","What's the path to $1 ARPU — walk me through the math?","Why hasn't Snap, TikTok, or Instagram already shipped this exact feature?"],working:"Organic growth rate is exceptional — that's a real signal in social."},
+    {score:5,verdict:"Strong insight. Weak on why now and why you.",flags:["The trend you're riding has a 12-month window before it goes mainstream or dies.","No explanation of content supply strategy — who creates the first 10,000 posts?","User acquisition cost at scale is completely missing from the model."],questions:["Why is now the right moment — what changed in the last 18 months?","What does your most retained user do that they can't do anywhere else?","If you're successful, how do you handle the creator economy labor problem?"],working:"The community-first approach to growth is smart and defensible — you understand that distribution is the product."}
+  ]
+};
 
-/* MODAL */
-function openModal(tag,title,sub) {
-  document.getElementById('modal-tag').textContent = tag;
-  document.getElementById('modal-title').textContent = title;
-  document.getElementById('modal-sub').textContent = sub||'Fill in your details and we\'ll be in touch shortly.';
-  document.getElementById('modal-fields').style.display = 'block';
-  document.getElementById('modal-success').className = 'modal-success';
+const sectorLabels = {saas:'SaaS',marketplace:'Marketplace',consumer:'Consumer',deeptech:'Deep Tech',fintech:'FinTech',social:'Social'};
+let currentSector = 'saas';
+const roastIdx = {saas:0,marketplace:0,consumer:0,deeptech:0,fintech:0,social:0};
+
+/* ---- MODAL ---- */
+function openModal(tag,title,sub){
+  document.getElementById('modal-tag').textContent=tag;
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-sub').textContent=sub||'Fill in your details and we\'ll be in touch shortly.';
+  document.getElementById('modal-fields').style.display='block';
+  document.getElementById('modal-success').className='modal-success';
   document.getElementById('modal-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow='hidden';
 }
-function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); document.body.style.overflow = ''; }
-function closeModalOutside(e) { if (e.target.id === 'modal-overlay') closeModal(); }
-function submitModal() { document.getElementById('modal-fields').style.display = 'none'; document.getElementById('modal-success').classList.add('show'); }
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');document.body.style.overflow='';}
+function closeModalOutside(e){if(e.target.id==='modal-overlay')closeModal();}
+function submitModal(){document.getElementById('modal-fields').style.display='none';document.getElementById('modal-success').classList.add('show');}
 
-/* MOBILE NAV */
-function toggleMobile() { document.getElementById('mobile-menu').classList.toggle('open'); }
-function closeMobile() { document.getElementById('mobile-menu').classList.remove('open'); }
+/* ---- MOBILE NAV ---- */
+function toggleMobile(){document.getElementById('mobile-menu').classList.toggle('open');}
+function closeMobile(){document.getElementById('mobile-menu').classList.remove('open');}
 
-/* CONTACT FORM */
-function submitContact() { document.getElementById('contact-form-inner').style.display = 'none'; document.getElementById('contact-success').style.display = 'block'; }
-function resetContact() { document.getElementById('contact-form-inner').style.display = 'block'; document.getElementById('contact-success').style.display = 'none'; }
+/* ---- CONTACT ---- */
+function submitContact(){document.getElementById('contact-form-inner').style.display='none';document.getElementById('contact-success').style.display='block';}
+function resetContact(){document.getElementById('contact-form-inner').style.display='block';document.getElementById('contact-success').style.display='none';}
 
-/* DEMO */
-function switchPlatform(p,btn) { plat=p; document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderPreview(); }
-function switchMode(m,btn) { mode=m; document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); applyMode(); }
-function applyMode() {
-  document.getElementById('phone-frame').classList.toggle('light-mode', mode==='light');
-  ['wa-body','tw-body','ai-body'].forEach(id => {
-    const el = document.getElementById(id); if (!el) return;
-    if (mode==='dark'){el.classList.add('dark');el.classList.remove('light')}
-    else{el.classList.remove('dark');el.classList.add('light')}
-  });
-  const aih = document.getElementById('ai-header');
-  if (aih){aih.style.background=mode==='light'?'#F5F5F5':'';aih.style.borderColor=mode==='light'?'rgba(0,0,0,.06)':''}
+/* ---- DEMO ---- */
+function switchSector(s,btn){
+  currentSector=s;
+  document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
 }
-function getMsgs() {
-  return Array.from(document.querySelectorAll('#msg-area .msg-input-wrap input')).filter(i=>i.value.trim()).map(i=>({text:i.value.trim(),side:i.dataset.side}));
+
+function tryExample(text){
+  document.getElementById('pitch-input').value=text;
+  document.getElementById('pitch-input').focus();
 }
-function addMessage() {
-  const area = document.getElementById('msg-area');
-  const rows = area.querySelectorAll('.msg-row');
-  const lastInp = rows.length ? rows[rows.length-1].querySelector('input') : null;
-  const ns = (lastInp&&lastInp.dataset.side==='sent') ? 'received' : 'sent';
-  const row = document.createElement('div'); row.className='msg-row';
-  row.innerHTML=`<span class="msg-side-label">${ns==='sent'?'You':'Them'}</span><div class="msg-input-wrap"><input type="text" placeholder="Message..." data-side="${ns}" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:.55rem .85rem;color:#F5F2EC;font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;width:100%"></div>`;
-  area.appendChild(row); row.querySelector('input').focus();
+
+function roastPitch(){
+  document.getElementById('roast-placeholder').style.display='none';
+  document.getElementById('roast-card').classList.remove('show');
+  document.getElementById('roast-generating').classList.add('show');
+  setTimeout(()=>{
+    const data=roastData[currentSector];
+    const roast=data[roastIdx[currentSector]%data.length];
+    roastIdx[currentSector]++;
+    renderRoast(roast);
+    document.getElementById('roast-generating').classList.remove('show');
+    document.getElementById('roast-card').classList.add('show');
+  },1800);
 }
-function renderPreview() {
-  const ny = document.getElementById('name-you').value||'You';
-  const nt = document.getElementById('name-them').value||'Them';
-  const msgs = getMsgs();
-  ['preview-wa','preview-tw','preview-ai'].forEach(id=>document.getElementById(id).style.display='none');
-  const ts = ['9:41','9:42','9:42','9:43','9:44','9:45'];
-  if (plat==='wa') {
-    document.getElementById('preview-wa').style.display='block';
-    document.getElementById('wa-name').textContent=nt;
-    document.getElementById('wa-av').textContent=nt[0]||'?';
-    const body=document.getElementById('wa-body'); body.innerHTML='';
-    msgs.forEach((m,i)=>{const b=document.createElement('div');b.className=`wa-bubble ${m.side}`;b.innerHTML=`${m.text}<div class="wa-time">${ts[i]||'9:45'} AM</div>`;body.appendChild(b)});
-  } else if (plat==='tw') {
-    document.getElementById('preview-tw').style.display='block';
-    document.getElementById('tw-hname').textContent=nt;
-    document.getElementById('tw-hhandle').textContent='@'+nt.toLowerCase();
-    const body=document.getElementById('tw-body'); body.innerHTML='';
-    msgs.forEach(m=>{const n=m.side==='sent'?ny:nt;const c=document.createElement('div');c.className='tweet-card';c.innerHTML=`<div class="tw-user-row"><div class="tw-av">${n[0]}</div><div><div class="tw-uname">${n}</div><div class="tw-handle">@${n.toLowerCase()}</div></div></div><div class="tweet-text">${m.text}</div><div class="tweet-stats"><span>${Math.floor(Math.random()*999+10)} likes</span><span>${Math.floor(Math.random()*200+5)} RTs</span></div>`;body.appendChild(c)});
-  } else if (plat==='ai') {
-    document.getElementById('preview-ai').style.display='block';
-    const body=document.getElementById('ai-body'); body.innerHTML='';
-    msgs.forEach(m=>{const isU=m.side==='sent';const d=document.createElement('div');d.className='ai-msg';d.innerHTML=`<div class="ai-role">${isU?'you':'assistant'}</div><div class="ai-text ${!isU?'assistant-msg':''}">${m.text}</div>`;body.appendChild(d)});
-  }
-  applyMode();
+
+function renderRoast(roast){
+  document.getElementById('vc-sector-badge').textContent=sectorLabels[currentSector];
+  document.getElementById('roast-score-num').textContent=roast.score+'/10';
+  const fill=document.getElementById('roast-score-fill');
+  fill.style.width=(roast.score*10)+'%';
+  fill.style.background=roast.score<=4
+    ?'linear-gradient(90deg,#FF3A2D,#FF6B35)'
+    :roast.score<=6
+      ?'linear-gradient(90deg,#FF6B35,#E8C847)'
+      :'linear-gradient(90deg,#74AA9C,#E8FF47)';
+  document.getElementById('roast-verdict').textContent='"'+roast.verdict+'"';
+  document.getElementById('roast-flags').innerHTML=roast.flags.map(f=>`<div class="roast-item flag">${f}</div>`).join('');
+  document.getElementById('roast-questions').innerHTML=roast.questions.map(q=>`<div class="roast-item question">→ ${q}</div>`).join('');
+  document.getElementById('roast-win').innerHTML=`<div class="roast-item win">✓ ${roast.working}</div>`;
 }
-async function generateWithAI() {
-  const ny=document.getElementById('name-you').value||'Alex';
-  const nt=document.getElementById('name-them').value||'Jordan';
-  const pm={wa:'WhatsApp',tw:'Twitter DM',ai:'ChatGPT'};
-  const status=document.getElementById('ai-status'); status.classList.add('show');
-  try {
-    const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:`Generate a realistic ${pm[plat]} conversation between "${ny}" and "${nt}" for a marketing mockup. 4-6 messages. Topic: great product/service experience. Respond ONLY with a JSON array (no markdown, no explanation):\n[{"side":"received","text":"..."}]\n"received"=from ${nt},"sent"=from ${ny}.`}]})});
-    const data=await res.json();
-    const raw=data.content.map(c=>c.text||'').join('');
-    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
-    const area=document.getElementById('msg-area'); area.innerHTML='';
-    parsed.forEach(msg=>{const row=document.createElement('div');row.className='msg-row';row.innerHTML=`<span class="msg-side-label">${msg.side==='sent'?'You':'Them'}</span><div class="msg-input-wrap"><input type="text" value="${msg.text.replace(/"/g,'&quot;')}" data-side="${msg.side}" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:.55rem .85rem;color:#F5F2EC;font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;width:100%"></div>`;area.appendChild(row)});
-    renderPreview();
-  } catch(e){console.error(e)}
-  finally{status.classList.remove('show')}
-}
-renderPreview();
 </script>
 </body>
 </html>
